@@ -253,9 +253,12 @@ def load_llff_data(basedir, factor=8, recenter=True, bd_factor=.75, spherify=Fal
     # (3,5,20) -> (20,3,5) 
     poses = np.moveaxis(poses, -1, 0).astype(np.float32)
     print ('++++++', poses.shape)
-    print(ggggg)
     imgs = np.moveaxis(imgs, -1, 0).astype(np.float32)
+
     images = imgs
+    print ('++++++', images.shape)
+    print(ggggg)
+
     # (2,20) -> (20,2)
     bds = np.moveaxis(bds, -1, 0).astype(np.float32)
     
