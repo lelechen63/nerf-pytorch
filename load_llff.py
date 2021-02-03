@@ -264,7 +264,7 @@ def load_llff_data(basedir, factor=8, recenter=True, bd_factor=.75, spherify=Fal
     sc = 1. if bd_factor is None else 1./(bds.min() * bd_factor)
     poses[:,:3,3] *= sc
     bds *= sc
-    
+    print('+++++', recenter, spherify)
     if recenter:
         poses = recenter_poses(poses)
         
@@ -273,10 +273,9 @@ def load_llff_data(basedir, factor=8, recenter=True, bd_factor=.75, spherify=Fal
 
     else:
         
-        c2w = poses_avg(poses)
+        c2w = poses_avg(poses)  # (3,5)
         print('recentered', c2w.shape)
         print(c2w[:3,:4])
-        print (ggg)
 
         ## Get spiral
         # Get average pose
