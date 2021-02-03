@@ -252,12 +252,10 @@ def load_llff_data(basedir, factor=8, recenter=True, bd_factor=.75, spherify=Fal
     # I am not sure why they need to switch this dimention.
     # (3,5,20) -> (20,3,5) 
     poses = np.moveaxis(poses, -1, 0).astype(np.float32)
-    print ('++++++', poses.shape)
-    imgs = np.moveaxis(imgs, -1, 0).astype(np.float32)
 
+    imgs = np.moveaxis(imgs, -1, 0).astype(np.float32)
     images = imgs
-    print ('++++++', images.shape)
-    print(ggggg)
+    # images shape (20, 378, 504, 3)
 
     # (2,20) -> (20,2)
     bds = np.moveaxis(bds, -1, 0).astype(np.float32)
@@ -278,6 +276,7 @@ def load_llff_data(basedir, factor=8, recenter=True, bd_factor=.75, spherify=Fal
         c2w = poses_avg(poses)
         print('recentered', c2w.shape)
         print(c2w[:3,:4])
+        print (ggg)
 
         ## Get spiral
         # Get average pose
