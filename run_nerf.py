@@ -549,7 +549,10 @@ def train():
                                                                   spherify=args.spherify)
         hwf = poses[0,:3,-1]
         poses = poses[:,:3,:4]
+        #Loaded llff (20, 378, 504, 3) (120, 3, 5) [378.     504.     407.5658] ./data/nerf_llff_data/fern
         print('Loaded llff', images.shape, render_poses.shape, hwf, args.datadir)
+        print (i_test)
+        print(gggg)
         if not isinstance(i_test, list):
             i_test = [i_test]
 
@@ -565,7 +568,7 @@ def train():
         if args.no_ndc:
             near = np.ndarray.min(bds) * .9
             far = np.ndarray.max(bds) * 1.
-            
+
         else:
             near = 0.
             far = 1.
