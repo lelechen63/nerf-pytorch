@@ -182,7 +182,7 @@ def create_nerf(args):
     embed_fn, input_ch = get_embedder(args.multires, args.i_embed)
     print(embed_fn)
     print (input_ch) 
-    #input_ch 63
+    #input_ch 60
     print(gg)
     input_ch_views = 0
     embeddirs_fn = None
