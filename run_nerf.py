@@ -551,8 +551,6 @@ def train():
         poses = poses[:,:3,:4]
         #Loaded llff (20, 378, 504, 3) (120, 3, 5) [378.     504.     407.5658] ./data/nerf_llff_data/fern
         print('Loaded llff', images.shape, render_poses.shape, hwf, args.datadir)
-        print (i_test)
-        print(gggg)
         if not isinstance(i_test, list):
             i_test = [i_test]
 
@@ -564,6 +562,9 @@ def train():
         i_train = np.array([i for i in np.arange(int(images.shape[0])) if
                         (i not in i_test and i not in i_val)])
 
+        print (i_test)
+        print(i_train)
+        print(ggggg)
         print('DEFINING BOUNDS')
         if args.no_ndc:
             near = np.ndarray.min(bds) * .9
