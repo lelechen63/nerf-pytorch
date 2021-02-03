@@ -61,13 +61,14 @@ def _minify(basedir, factors=[], resolutions=[]):
         
 def _load_data(basedir, factor=None, width=None, height=None, load_imgs=True):
     
+    # pose_arry: (20, 17)
     poses_arr = np.load(os.path.join(basedir, 'poses_bounds.npy'))
-    poses = poses_arr[:, :-2].reshape([-1, 3, 5]).transpose([1,2,0])
-    bds = poses_arr[:, -2:].transpose([1,0])
+    poses = poses_arr[:, :-2].reshape([-1, 3, 5]).transpose([1,2,0])   # first 15, (3,5,20) 20 is the number of images
+    bds = poses_arr[:, -2:].transpose([1,0])   # bds last 2, #(2,20)
     
     img0 = [os.path.join(basedir, 'images', f) for f in sorted(os.listdir(os.path.join(basedir, 'images'))) \
             if f.endswith('JPG') or f.endswith('jpg') or f.endswith('png')][0]
-    sh = imageio.imread(img0).shape
+    sh = imageio.imread(img0).shape # shape of one image
     
     sfx = ''
     
@@ -98,10 +99,10 @@ def _load_data(basedir, factor=None, width=None, height=None, load_imgs=True):
         print( 'Mismatch between imgs {} and poses {} !!!!'.format(len(imgfiles), poses.shape[-1]) )
         return
     
-    sh = imageio.imread(imgfiles[0]).shape
-    poses[:2, 4, :] = np.array(sh[:2]).reshape([2, 1])
-    poses[2, 4, :] = poses[2, 4, :] * 1./factor
-    
+    sh = imageio.imread(imgfiles[0]).shape   # sh is the shape of imgeio readed image
+    poses[:2, 4, :] = np.array(sh[:2]).reshape([2, 1]) # poses (3,5,20), the [0:1,4,:] cells store H,W
+    poses[2, 4, :] = poses[2, 4, :] * 1./factor # pose(3,5,30), [2,4,:] stores teh factor
+    # summary: poses (3,5,20), [:3,:5,:] store the (3x4) pose vector, the last 3 cells stores H,W,factor
     if not load_imgs:
         return poses, bds
     
@@ -242,15 +243,20 @@ def spherify_poses(poses, bds):
 
 def load_llff_data(basedir, factor=8, recenter=True, bd_factor=.75, spherify=False, path_zflat=False):
     
-
     poses, bds, imgs = _load_data(basedir, factor=factor) # factor=8 downsamples original imgs by 8x
+    # poses (3,5,20), bds (2,20)
     print('Loaded', basedir, bds.min(), bds.max())
     
     # Correct rotation matrix ordering and move variable dim to axis 0
     poses = np.concatenate([poses[:, 1:2, :], -poses[:, 0:1, :], poses[:, 2:, :]], 1)
+    # I am not sure why they need to switch this dimention.
+    # (3,5,20) -> (20,3,5) 
     poses = np.moveaxis(poses, -1, 0).astype(np.float32)
+    print ('++++++', poses.shape)
+    print(ggggg)
     imgs = np.moveaxis(imgs, -1, 0).astype(np.float32)
     images = imgs
+    # (2,20) -> (20,2)
     bds = np.moveaxis(bds, -1, 0).astype(np.float32)
     
     # Rescale if bd_factor is provided
