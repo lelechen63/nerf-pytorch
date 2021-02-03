@@ -178,8 +178,11 @@ def render_path(render_poses, hwf, chunk, render_kwargs, gt_imgs=None, savedir=N
 def create_nerf(args):
     """Instantiate NeRF's MLP model.
     """
+    print(args.multires, args.i_embed)
     embed_fn, input_ch = get_embedder(args.multires, args.i_embed)
-
+    print(embed_fn)
+    print (input_ch)
+    print(gg)
     input_ch_views = 0
     embeddirs_fn = None
     if args.use_viewdirs:
@@ -561,7 +564,8 @@ def train():
         i_val = i_test
         i_train = np.array([i for i in np.arange(int(images.shape[0])) if
                         (i not in i_test and i not in i_val)])
-
+        # i_test: [ 0  8 16]
+        # i_train: [ 1  2  3  4  5  6  7  9 10 11 12 13 14 15 17 18 19]
         print (i_test)
         print(i_train)
         print(ggggg)
