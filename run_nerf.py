@@ -200,7 +200,7 @@ def create_nerf(args):
                  input_ch_views=input_ch_views, use_viewdirs=args.use_viewdirs)
     
     print (model)
-    print(gg)
+    # print(gg)
     model = nn.DataParallel(model).to(device)
     grad_vars = list(model.parameters())
 
@@ -212,6 +212,10 @@ def create_nerf(args):
         model_fine = nn.DataParallel(model_fine).to(device)
         grad_vars += list(model_fine.parameters())
 
+    print (inputs.shape)
+    print (viewdirs)
+    print (network_fn)
+    print (gg)
     network_query_fn = lambda inputs, viewdirs, network_fn : run_network(inputs, viewdirs, network_fn,
                                                                 embed_fn=embed_fn,
                                                                 embeddirs_fn=embeddirs_fn,
