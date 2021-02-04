@@ -37,6 +37,8 @@ def batchify(fn, chunk):
 def run_network(inputs, viewdirs, fn, embed_fn, embeddirs_fn, netchunk=1024*64):
     """Prepares inputs and applies network 'fn'.
     """
+    print(inputs.shape)
+    print(viewdirs)
     inputs_flat = torch.reshape(inputs, [-1, inputs.shape[-1]])
     embedded = embed_fn(inputs_flat)
 
@@ -212,15 +214,17 @@ def create_nerf(args):
         model_fine = nn.DataParallel(model_fine).to(device)
         grad_vars += list(model_fine.parameters())
 
-    print (inputs.shape)
-    print (viewdirs)
-    print (network_fn)
-    print (gg)
+    
     network_query_fn = lambda inputs, viewdirs, network_fn : run_network(inputs, viewdirs, network_fn,
                                                                 embed_fn=embed_fn,
                                                                 embeddirs_fn=embeddirs_fn,
                                                                 netchunk=args.netchunk_per_gpu*args.n_gpus)
 
+    # print (inputs.shape)
+    # print (viewdirs)
+    # print (network_fn)
+    print (gg)
+    
     # Create optimizer
     optimizer = torch.optim.Adam(params=grad_vars, lr=args.lrate, betas=(0.9, 0.999))
 
