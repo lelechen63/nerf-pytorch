@@ -767,9 +767,10 @@ def train():
         rgb, disp, acc, extras = render(H, W, focal, chunk=args.chunk, rays=batch_rays,
                                                 verbose=i < 10, retraw=True,
                                                 **render_kwargs_train)
+        print('=============')
         print (rgb.shape, disp.shape)
-        print (acc)
-        print(extras)
+        print (acc.shape)
+        print(extras.shape)
         print(gg)
         optimizer.zero_grad()
         img_loss = img2mse(rgb, target_s)
