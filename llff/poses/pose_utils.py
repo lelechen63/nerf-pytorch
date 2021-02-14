@@ -63,9 +63,9 @@ def save_poses(basedir, poses, pts3d, perm):
     for k in pts3d:
         pts_arr.append(pts3d[k].xyz)
         cams = [0] * poses.shape[-1]
-        print(k,'===')
+        # print(k,'===')
         for ind in pts3d[k].image_ids:
-            print(ind,'----')
+            # print(ind,'----')
             if len(cams) < ind - 1:
                 print('ERROR: the correct camera poses for current points cannot be accessed')
                 return
@@ -263,7 +263,7 @@ def load_data(basedir, factor=None, width=None, height=None, load_imgs=True):
             
     
 def gen_poses(basedir, match_type, factors=None):
-    
+    print (basedir)
     files_needed = ['{}.bin'.format(f) for f in ['cameras', 'images', 'points3D']]
     if os.path.exists(os.path.join(basedir, 'sparse/0')):
         files_had = os.listdir(os.path.join(basedir, 'sparse/0'))
