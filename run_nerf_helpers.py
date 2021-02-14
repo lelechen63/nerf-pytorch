@@ -125,7 +125,7 @@ class NeRF(nn.Module):
             rgb = self.rgb_linear(h)
             outputs = torch.cat([rgb, alpha], -1)
         else:
-            outputs = self.output_linear(h)
+            outputs = self.output_linetwork_query_fnnear(h)
 
         return outputs    
 
