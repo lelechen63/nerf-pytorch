@@ -3,7 +3,7 @@ import sys
 
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument('v_path', type=str, defual='/home/cxu-serve/u1/lchen63/github/nerf-pytorch/data/lele_data/video/IMG_0267.MOV'
+parser.add_argument('v_path', type=str, defual='/home/cxu-serve/u1/lchen63/github/nerf-pytorch/data/lele_data/video/IMG_0267.MOV',
                     help='input scene directory')
 args = parser.parse_args()
 
