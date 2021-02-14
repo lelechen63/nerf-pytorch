@@ -11,9 +11,13 @@ args = parser.parse_args()
 def video2img(v_path, img_path):
     raw = cv2.VideoCapture(v_path)
     ret = True
+    count = 0
     while ret:
+        count += 1
         ret,frame = raw.read()
-        print(ret)
+        if not ret:
+            break
+        print(ret,count)
         print(frame.shape)
 
 video2img(args.v_path, None)
