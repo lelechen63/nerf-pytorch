@@ -3,7 +3,7 @@ import sys
 
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument('v_path', type=str,
+parser.add_argument('v_path', type=str, defual='/home/cxu-serve/u1/lchen63/github/nerf-pytorch/data/lele_data/video/IMG_0267.MOV'
                     help='input scene directory')
 args = parser.parse_args()
 
@@ -16,4 +16,4 @@ def video2img(v_path, img_path):
         print(ret)
         print(frame.shape)
 
-video2img('/home/cxu-serve/u1/lchen63/github/nerf-pytorch/data/lele_data/video/IMG_0267.MOV', None)
+video2img(args.v_path, None)
