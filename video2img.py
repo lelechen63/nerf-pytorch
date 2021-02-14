@@ -1,6 +1,7 @@
 import cv2
 import sys
 
+import os
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('--v_path', type=str, default='/home/cxu-serve/u1/lchen63/github/nerf-pytorch/data/lele_data/video/IMG_0267.MOV',
