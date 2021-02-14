@@ -63,7 +63,7 @@ def save_poses(basedir, poses, pts3d, perm):
     for k in pts3d:
         pts_arr.append(pts3d[k].xyz)
         cams = [0] * poses.shape[-1]
-        # print(k,'===')
+        print(pts3d[k].image_ids,'===', len(cams))
         for ind in pts3d[k].image_ids:
             # print(ind,'----')
             if len(cams) < ind - 1:
