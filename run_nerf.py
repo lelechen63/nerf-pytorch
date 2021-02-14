@@ -770,8 +770,6 @@ def train():
         #torch.Size([1024, 3]) torch.Size([1024]), torch.Size([1024])
         print('=============')
         print (acc.shape,'==')
-        print(extras.shape,'++')
-        print(gg)
         optimizer.zero_grad()
         img_loss = img2mse(rgb, target_s)
         trans = extras['raw'][...,-1]
