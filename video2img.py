@@ -32,4 +32,4 @@ def video2img(v_path = None, v_id = None,  img_path = None, step = 10):
             cv2.imwrite(img_name, frame)
         count += 1
     return imgs
-video2img(args.v_path, args.img_path, args.v_id)
+video2img(args.v_path, args.v_id, args.img_path)
