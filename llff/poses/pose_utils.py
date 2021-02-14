@@ -58,7 +58,7 @@ def save_poses(basedir, poses, pts3d, perm):
     vis_arr = []
     print ('++++++++')
     print (poses.shape)
-    print( pts3d.shape)
+    print( pts3d)
     print( perm.shape)
     for k in pts3d:
         pts_arr.append(pts3d[k].xyz)
