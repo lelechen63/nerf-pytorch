@@ -20,7 +20,7 @@ def video2img(v_path = None, v_id = None,  img_path = None, step = 10):
     raw = cv2.VideoCapture(v_path)
     ret = True
     count = 0
-    imgs = []
+    # imgs = []
     store_step = [0, 65, 70, 75, 80, 85, 90, 95, 100,105, 110, 115, 120, 125, 390,400, 405, 410,420,430]
     print(len(store_step))
     while ret:
@@ -34,5 +34,5 @@ def video2img(v_path = None, v_id = None,  img_path = None, step = 10):
             img_name = os.path.join( img_path, v_id + '_%05d.png'%count)
             cv2.imwrite(img_name, frame)
         count += 1
-    return imgs
+    # return imgs
 video2img(args.v_path, args.v_id, args.img_path)
