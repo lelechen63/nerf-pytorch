@@ -24,7 +24,9 @@ def load_colmap_data(realdir):
     
     imagesfile = os.path.join(realdir, 'sparse/0/images.bin')
     imdata = read_model.read_images_binary(imagesfile)
-    
+    print(imdata)
+    print (len(imdata),'!!!!!!!!')
+
     w2c_mats = []
     bottom = np.array([0,0,0,1.]).reshape([1,4])
     
