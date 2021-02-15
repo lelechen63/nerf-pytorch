@@ -21,13 +21,16 @@ def video2img(v_path = None, v_id = None,  img_path = None, step = 10):
     ret = True
     count = 0
     imgs = []
+    store_step = [0, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100,105, 110,120,390,400,410,420,430]
+    print(len(store_step))
     while ret:
         ret,frame = raw.read()
         if not ret:
             break
         print(ret,count)
         print(frame.shape)
-        if count % step == 0:
+        if count in  store_step:
+        # if count % step == 0:
             img_name = os.path.join( img_path, v_id + '_%05d.png'%count)
             cv2.imwrite(img_name, frame)
         count += 1
