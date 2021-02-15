@@ -37,8 +37,8 @@ def batchify(fn, chunk):
 def run_network(inputs, viewdirs, fn, embed_fn, embeddirs_fn, netchunk=1024*64):
     """Prepares inputs and applies network 'fn'.
     """
-    print(inputs.shape)
-    print(viewdirs)
+    # print(inputs.shape)
+    # print(viewdirs)
     inputs_flat = torch.reshape(inputs, [-1, inputs.shape[-1]])
     embedded = embed_fn(inputs_flat)
 
@@ -182,8 +182,8 @@ def create_nerf(args):
     """
     print(args.multires, args.i_embed)
     embed_fn, input_ch = get_embedder(args.multires, args.i_embed)
-    print(embed_fn)
-    print (input_ch) 
+    # print(embed_fn)
+    # print (input_ch) 
     #input_ch 63
     print (args.use_viewdirs)
     
@@ -191,8 +191,8 @@ def create_nerf(args):
     embeddirs_fn = None
     if args.use_viewdirs:
         embeddirs_fn, input_ch_views = get_embedder(args.multires_views, args.i_embed)
-    print(embeddirs_fn)
-    print(input_ch_views)
+    # print(embeddirs_fn)
+    # print(input_ch_views)
     #input_ch_views 27
     
     output_ch = 5 if args.N_importance > 0 else 4
@@ -768,8 +768,8 @@ def train():
                                                 verbose=i < 10, retraw=True,
                                                 **render_kwargs_train)
         #torch.Size([1024, 3]) torch.Size([1024]), torch.Size([1024])
-        print('=============')
-        print (acc.shape,'==')
+        # print('=============')
+        # print (acc.shape,'==')
         optimizer.zero_grad()
         img_loss = img2mse(rgb, target_s)
         trans = extras['raw'][...,-1]
