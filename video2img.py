@@ -21,7 +21,7 @@ def video2img(v_path = None, v_id = None,  img_path = None, step = 10):
     ret = True
     count = 0
     imgs = []
-    store_step = [0, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100,105, 110,120,390,400,410,420,430]
+    store_step = [0, 65, 70, 75, 80, 85, 90, 95, 100,105, 110, 115, 120, 125, 390,400, 405, 410,420,430]
     print(len(store_step))
     while ret:
         ret,frame = raw.read()
