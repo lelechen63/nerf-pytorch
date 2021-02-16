@@ -683,6 +683,10 @@ def train():
     # Prepare raybatch tensor if batching random rays
     N_rand = args.N_rand
     use_batching = not args.no_batching
+
+    # fake the facial expression
+    img_exps = torch.zeros(images.shape[0], 76)
+    
     if use_batching:
         # For random ray batching
         print('get rays')
@@ -690,9 +694,17 @@ def train():
         print('done, concats')
         print('**********', rays.shape, images.shape)
         rays_rgb = np.concatenate([rays, images[:,None]], 1) # [N, ro+rd+rgb, H, W, 3]
+        print (rays_rgb.shape,'3')
         rays_rgb = np.transpose(rays_rgb, [0,2,3,1,4]) # [N, H, W, ro+rd+rgb, 3]
+        print (rays_rgb.shape,'5')
+
         rays_rgb = np.stack([rays_rgb[i] for i in i_train], 0) # train images only
+        print (rays_rgb.shape,'6')
+
         rays_rgb = np.reshape(rays_rgb, [-1,3,3]) # [(N-1)*H*W, ro+rd+rgb, 3]
+
+        print (rays_rgb.shape,'7')
+
         rays_rgb = rays_rgb.astype(np.float32)
         print('shuffle rays')
         np.random.shuffle(rays_rgb)
