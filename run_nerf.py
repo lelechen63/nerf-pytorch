@@ -401,8 +401,6 @@ def render_rays(ray_batch,
 
 
 #     raw = run_network(pts)
-    print (pts.shape, viewdirs.shape)
-    print(gggg)
     raw = network_query_fn(pts, viewdirs, network_fn)
     rgb_map, disp_map, acc_map, weights, depth_map = raw2outputs(raw, z_vals, rays_d, raw_noise_std, white_bkgd, pytest=pytest)
 
@@ -752,6 +750,7 @@ def train():
             batch = rays_rgb[i_batch:i_batch+N_rand] # [B, 2+1, 3*?]
             batch = torch.transpose(batch, 0, 1)
             batch_rays, target_s, target_exp = batch[:2], batch[2],  batch[3:]
+            target_exp = torch.target_exp(target_exp, 0, 1).view(-1, exp_bite)
             print (batch.shape, '--------')
 
             print ('+++----++++', batch_rays.shape, target_s.shape, target_exp.shape)
@@ -795,7 +794,7 @@ def train():
                 rays_d = rays_d[select_coords[:, 0], select_coords[:, 1]]  # (N_rand, 3)
                 batch_rays = torch.stack([rays_o, rays_d], 0)  # (2, N_rand, 3)
                 target_s = target[select_coords[:, 0], select_coords[:, 1]]  # (N_rand, 3)
-
+                print ('!!!!!!!!!!!!!!!!1')
         #####  Core optimization loop  #####
         rgb, disp, acc, extras = render(H, W, focal, chunk=args.chunk, rays=batch_rays,
                                                 verbose=i < 10, retraw=True,
