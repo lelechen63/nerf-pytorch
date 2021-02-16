@@ -77,7 +77,7 @@ def get_embedder(multires, i=0):
 # Model
 class NeRF(nn.Module):
     def __init__(self, D=8, W=256, input_ch=3, input_ch_views=3, 
-                    output_ch=4, skips=[4], use_viewdirs=False, input_ch_exp=76):
+                    output_ch=4, skips=[4], use_viewdirs=False, input_ch_exp=0):
         """ 
         """
         super(NeRF, self).__init__()
@@ -88,9 +88,9 @@ class NeRF(nn.Module):
         self.input_ch_views = input_ch_views
         self.skips = skips
         self.use_viewdirs = use_viewdirs
-        print(input_ch,'++++')
+
         self.pts_linears = nn.ModuleList(
-            [DenseLayer(input_ch, W, activation="relu")] + [DenseLayer(W, W, activation="relu") if i not in self.skips else DenseLayer(W + input_ch, W, activation="relu") for i in range(D-1)])
+            [DenseLayer(input_ch + input_ch_exp, W, activation="relu")] + [DenseLayer(W, W, activation="relu") if i not in self.skips else DenseLayer(W + input_ch, W, activation="relu") for i in range(D-1)])
         
         ### Implementation according to the official code release (https://github.com/bmild/nerf/blob/master/run_nerf_helpers.py#L104-L105)
         self.views_linears = nn.ModuleList([DenseLayer(input_ch_views + W, W//2, activation="relu")])
@@ -107,15 +107,13 @@ class NeRF(nn.Module):
             self.output_linear = DenseLayer(W, output_ch, activation="linear")
 
     def forward(self, x):
-        input_pts, input_views = torch.split(x, [self.input_ch, self.input_ch_views], dim=-1)
-        h = input_pts
-        print(self.pts_linears)
-        print(gg)
+        input_pts, input_views, input_ch_exp = torch.split(x, [self.input_ch, self.input_ch_views, self.input_ch_exp], dim=-1)
+        h = torch.cat([input_pts, input_ch_exp])
         for i, l in enumerate(self.pts_linears):
             h = self.pts_linears[i](h)
             h = F.relu(h)
             if i in self.skips:
-                h = torch.cat([input_pts, h], -1)
+                h = torch.cat([input_pts, input_ch_exp, h], -1)
 
         if self.use_viewdirs:
             alpha = self.alpha_linear(h)
