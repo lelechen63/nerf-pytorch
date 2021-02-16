@@ -702,9 +702,11 @@ def train():
     # Move training data to GPU
     images = torch.Tensor(images).to(device)
     poses = torch.Tensor(poses).to(device)
+    print ('+++1', images.shape, poses.shape)
     if use_batching:
         rays_rgb = torch.Tensor(rays_rgb).to(device)
 
+    print ('+++1', rays_rgb.shape )
 
     N_iters = 200000 + 1
     print('Begin')
@@ -725,7 +727,7 @@ def train():
             batch = rays_rgb[i_batch:i_batch+N_rand] # [B, 2+1, 3*?]
             batch = torch.transpose(batch, 0, 1)
             batch_rays, target_s = batch[:2], batch[2]
-
+            print (batch.shape, '--------')
             print ('+++----++++', batch_rays.shape, target_s.shape)
 
 
