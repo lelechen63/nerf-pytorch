@@ -34,7 +34,7 @@ def batchify(fn, chunk):
     return ret
 
 
-def run_network(inputs, viewdirs, fn, embed_fn, embeddirs_fn, netchunk=1024*64):
+def run_network(inputs, exp_inputs, viewdirs, fn, embed_fn, embeddirs_fn, netchunk=1024*64):
     """Prepares inputs and applies network 'fn'.
     """
     # print(inputs.shape)
@@ -47,9 +47,10 @@ def run_network(inputs, viewdirs, fn, embed_fn, embeddirs_fn, netchunk=1024*64):
         input_dirs_flat = torch.reshape(input_dirs, [-1, input_dirs.shape[-1]])
         embedded_dirs = embeddirs_fn(input_dirs_flat)
         print(embedded.shape, embedded_dirs.shape)
-        embedded = torch.cat([embedded, embedded_dirs], -1)
+        embedded = torch.cat([embedded, embedded_dirs, exp_inputs], -1)
+
         print(embedded.shape,'====')
-        print(gggg)
+        # print(gggg)
     outputs_flat = batchify(fn, netchunk)(embedded)
     outputs = torch.reshape(outputs_flat, list(inputs.shape[:-1]) + [outputs_flat.shape[-1]])
     return outputs
@@ -212,7 +213,7 @@ def create_nerf(args):
         grad_vars += list(model_fine.parameters())
 
     
-    network_query_fn = lambda inputs, viewdirs, network_fn : run_network(inputs, viewdirs, network_fn,
+    network_query_fn = lambda inputs, exp_inputs, viewdirs, network_fn : run_network(inputs, exp_inputs, viewdirs, network_fn,
                                                                 embed_fn=embed_fn,
                                                                 embeddirs_fn=embeddirs_fn,
                                                                 netchunk=args.netchunk_per_gpu*args.n_gpus)
@@ -400,6 +401,8 @@ def render_rays(ray_batch,
 
 
 #     raw = run_network(pts)
+    print (pts.shape, viewdirs.shape, network_fn.shape)
+    print(gggg)
     raw = network_query_fn(pts, viewdirs, network_fn)
     rgb_map, disp_map, acc_map, weights, depth_map = raw2outputs(raw, z_vals, rays_d, raw_noise_std, white_bkgd, pytest=pytest)
 
