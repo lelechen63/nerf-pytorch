@@ -686,7 +686,7 @@ def train():
     use_batching = not args.no_batching
 
     # fake the facial expression
-    img_exps = np.zeros(images.shape[0], 76)
+    img_exps = np.zeros((images.shape[0], exp_bite))
     
     if use_batching:
         # For random ray batching
