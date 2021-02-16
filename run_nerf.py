@@ -56,12 +56,12 @@ def run_network(inputs, exp_inputs, viewdirs, fn, embed_fn, embeddirs_fn, netchu
     return outputs
 
 
-def batchify_rays(rays_flat, chunk=1024*32, **kwargs):
+def batchify_rays(rays_flat, exp_code,  chunk=1024*32, **kwargs):
     """Render rays in smaller minibatches to avoid OOM.
     """
     all_ret = {}
     for i in range(0, rays_flat.shape[0], chunk):
-        ret = render_rays(rays_flat[i:i+chunk], **kwargs)
+        ret = render_rays(rays_flat[i:i+chunk], exp_code[i:i+chunk] **kwargs)
         for k in ret:
             if k not in all_ret:
                 all_ret[k] = []
@@ -71,7 +71,7 @@ def batchify_rays(rays_flat, chunk=1024*32, **kwargs):
     return all_ret
 
 
-def render(H, W, focal, chunk=1024*32, rays=None, c2w=None, ndc=True,
+def render(H, W, focal, chunk=1024*32, rays=None, exp_code = None,  c2w=None, ndc=True,
                   near=0., far=1.,
                   use_viewdirs=False, c2w_staticcam=None,
                   **kwargs):
@@ -84,6 +84,7 @@ def render(H, W, focal, chunk=1024*32, rays=None, c2w=None, ndc=True,
         control maximum memory usage. Does not affect final results.
       rays: array of shape [2, batch_size, 3]. Ray origin and direction for
         each example in batch.
+      exp_code: array of shape [ batch_size, exp_bite]. The expression code of the sampled pixel.
       c2w: array of shape [3, 4]. Camera-to-world transformation matrix.
       ndc: bool. If True, represent ray origin, direction in NDC coordinates.
       near: float or array of shape [batch_size]. Nearest distance for a ray.
@@ -127,8 +128,9 @@ def render(H, W, focal, chunk=1024*32, rays=None, c2w=None, ndc=True,
     if use_viewdirs:
         rays = torch.cat([rays, viewdirs], -1)
 
+    exp_code = exp_code.float()
     # Render and reshape
-    all_ret = batchify_rays(rays, chunk, **kwargs)
+    all_ret = batchify_rays(rays,exp_code, chunk, **kwargs)
     for k in all_ret:
         k_sh = list(sh[:-1]) + list(all_ret[k].shape[1:])
         all_ret[k] = torch.reshape(all_ret[k], k_sh)
@@ -197,7 +199,7 @@ def create_nerf(args):
     skips = [4]
     model = NeRF(D=args.netdepth, W=args.netwidth,
                  input_ch=input_ch, output_ch=output_ch, skips=skips,
-                 input_ch_views=input_ch_views, use_viewdirs=args.use_viewdirs)
+                 input_ch_views=input_ch_views, use_viewdirs=args.use_viewdirs, input_ch_exp = args.exp_bite)
     
     print (model)
     # print(gg)
@@ -325,6 +327,7 @@ def raw2outputs(raw, z_vals, rays_d, raw_noise_std=0, white_bkgd=False, pytest=F
 
 
 def render_rays(ray_batch,
+                exp_code_batch,
                 network_fn,
                 network_query_fn,
                 N_samples,
@@ -342,6 +345,8 @@ def render_rays(ray_batch,
       ray_batch: array of shape [batch_size, ...]. All information necessary
         for sampling along a ray, including: ray origin, ray direction, min
         dist, max dist, and unit-magnitude viewing direction.
+      exp_code_batch: array of shape [batch_size, ...]. All information necessary
+        for expression code.
       network_fn: function. Model for predicting RGB and density at each point
         in space.
       network_query_fn: function used for passing queries to network_fn.
@@ -401,7 +406,7 @@ def render_rays(ray_batch,
 
 
 #     raw = run_network(pts)
-    raw = network_query_fn(pts, viewdirs, network_fn)
+    raw = network_query_fn(pts, exp_code_batch,  viewdirs, network_fn)
     rgb_map, disp_map, acc_map, weights, depth_map = raw2outputs(raw, z_vals, rays_d, raw_noise_std, white_bkgd, pytest=pytest)
 
     if N_importance > 0:
@@ -555,7 +560,7 @@ def train():
     parser = config_parser()
     args = parser.parse_args()
     exp_bite = 75
-
+    args.exp_bite = exp_bite
     # Multi-GPU
     args.n_gpus = torch.cuda.device_count()
     print(f"Using {args.n_gpus} GPU(s).")
