@@ -726,6 +726,9 @@ def train():
             batch = torch.transpose(batch, 0, 1)
             batch_rays, target_s = batch[:2], batch[2]
 
+            print ('+++----++++', batch_rays.shape, target_s.shape)
+
+
             i_batch += N_rand
             if i_batch >= rays_rgb.shape[0]:
                 print("Shuffle data after an epoch!")
@@ -738,6 +741,8 @@ def train():
             img_i = np.random.choice(i_train)
             target = images[img_i]
             pose = poses[img_i, :3,:4]
+
+            print ('+++++++', target.shape, pose.shape)
 
             if N_rand is not None:
                 rays_o, rays_d = get_rays(H, W, focal, torch.Tensor(pose))  # (H, W, 3), (H, W, 3)
