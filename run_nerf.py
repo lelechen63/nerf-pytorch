@@ -239,19 +239,20 @@ def create_nerf(args):
     else:
         ckpts = [os.path.join(basedir, expname, f) for f in sorted(os.listdir(os.path.join(basedir, expname))) if 'tar' in f]
 
-    print('Found ckpts', ckpts)
-    if len(ckpts) > 0 and not args.no_reload:
-        ckpt_path = ckpts[-1]
-        print('Reloading from', ckpt_path)
-        ckpt = torch.load(ckpt_path)
+    if args.pretrain:
+        print('Found ckpts', ckpts)
+        if len(ckpts) > 0 and not args.no_reload:
+            ckpt_path = ckpts[-1]
+            print('Reloading from', ckpt_path)
+            ckpt = torch.load(ckpt_path)
 
-        start = ckpt['global_step']
-        optimizer.load_state_dict(ckpt['optimizer_state_dict'])
+            start = ckpt['global_step']
+            optimizer.load_state_dict(ckpt['optimizer_state_dict'])
 
-        # Load model
-        model.load_state_dict(ckpt['network_fn_state_dict'])
-        if model_fine is not None:
-            model_fine.load_state_dict(ckpt['network_fine_state_dict'])
+            # Load model
+            model.load_state_dict(ckpt['network_fn_state_dict'])
+            if model_fine is not None:
+                model_fine.load_state_dict(ckpt['network_fine_state_dict'])
 
     ##########################
 
@@ -560,6 +561,7 @@ def train():
     parser = config_parser()
     args = parser.parse_args()
     exp_bite = 75
+    args.pretrain = False
     args.exp_bite = exp_bite
     # Multi-GPU
     args.n_gpus = torch.cuda.device_count()
