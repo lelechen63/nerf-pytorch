@@ -556,6 +556,7 @@ def train():
 
     parser = config_parser()
     args = parser.parse_args()
+    exp_bite = 75
 
     # Multi-GPU
     args.n_gpus = torch.cuda.device_count()
@@ -685,7 +686,7 @@ def train():
     use_batching = not args.no_batching
 
     # fake the facial expression
-    img_exps = torch.zeros(images.shape[0], 76)
+    img_exps = np.zeros(images.shape[0], 76)
     
     if use_batching:
         # For random ray batching
@@ -699,13 +700,24 @@ def train():
         print (rays_rgb.shape,'5')
 
         rays_rgb = np.stack([rays_rgb[i] for i in i_train], 0) # train images only
+
+        train_exp = np.stack([img_exps[i] for i in i_train], 0)
+        print(train_exp.shape,'66')
+        train_exp = np.expand_dims(x, axis=(1,2)) 
+        train_exp = np.repeat(train_exp, repeats=H, axis=1)
+        train_exp = np.repeat(train_exp, repeats=W, axis=2)
+
+        train_exp = np.reshape(train_exp, [-1, int(exp_bite / 3 ), 3])
         print (rays_rgb.shape,'6')
 
-        rays_rgb = np.reshape(rays_rgb, [-1,3,3]) # [(N-1)*H*W, ro+rd+rgb, 3]
+        rays_rgb =  np.reshape(rays_rgb, [-1,3,3]) # [(N-1)*H*W, ro+rd+rgb, 3]
 
+        rays_rgb = np.concatenate((rays_rgb, train_exp), axis = 1) # [(N-1)*H*W, ro+rd+rgb + *(exp_bite)/3, 3]
         print (rays_rgb.shape,'7')
 
         rays_rgb = rays_rgb.astype(np.float32)
+
+        # train_exp = train_exp.astype(np.float32)
         print('shuffle rays')
         np.random.shuffle(rays_rgb)
 
@@ -739,9 +751,10 @@ def train():
             # Random over all images
             batch = rays_rgb[i_batch:i_batch+N_rand] # [B, 2+1, 3*?]
             batch = torch.transpose(batch, 0, 1)
-            batch_rays, target_s = batch[:2], batch[2]
+            batch_rays, target_s, target_exp = batch[:2], batch[2],  batch[3:]
             print (batch.shape, '--------')
-            print ('+++----++++', batch_rays.shape, target_s.shape)
+
+            print ('+++----++++', batch_rays.shape, target_s.shape, target_exp.shape)
 
 
             i_batch += N_rand
