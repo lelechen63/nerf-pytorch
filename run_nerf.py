@@ -803,8 +803,8 @@ def train():
                 target_s = target[select_coords[:, 0], select_coords[:, 1]]  # (N_rand, 3)
                 print ('!!!!!!!!!!!!!!!!1')
         #####  Core optimization loop  #####
-        rgb, disp, acc, extras = render(H, W, focal, chunk=args.chunk, rays=batch_rays,
-                                                verbose=i < 10, retraw=True,
+        rgb, disp, acc, extras = render(H, W, focal, chunk=args.chunk, rays=batch_rays, 
+                                        exp_code = target_exp, verbose=i < 10, retraw=True,
                                                 **render_kwargs_train)
         #torch.Size([1024, 3]) torch.Size([1024]), torch.Size([1024])
         # print('=============')
