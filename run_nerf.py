@@ -401,7 +401,7 @@ def render_rays(ray_batch,
 
 
 #     raw = run_network(pts)
-    print (pts.shape, viewdirs.shape, network_fn.shape)
+    print (pts.shape, viewdirs.shape)
     print(gggg)
     raw = network_query_fn(pts, viewdirs, network_fn)
     rgb_map, disp_map, acc_map, weights, depth_map = raw2outputs(raw, z_vals, rays_d, raw_noise_std, white_bkgd, pytest=pytest)
