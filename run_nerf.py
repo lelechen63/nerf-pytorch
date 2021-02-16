@@ -750,7 +750,7 @@ def train():
             batch = rays_rgb[i_batch:i_batch+N_rand] # [B, 2+1, 3*?]
             batch = torch.transpose(batch, 0, 1)
             batch_rays, target_s, target_exp = batch[:2], batch[2],  batch[3:]
-            target_exp = torch.target_exp(target_exp, 0, 1).view(-1, exp_bite)
+            target_exp = torch.transpose(target_exp, 0, 1).view(-1, exp_bite)
             print (batch.shape, '--------')
 
             print ('+++----++++', batch_rays.shape, target_s.shape, target_exp.shape)
