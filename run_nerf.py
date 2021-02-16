@@ -703,7 +703,7 @@ def train():
 
         train_exp = np.stack([img_exps[i] for i in i_train], 0)
         print(train_exp.shape,'66')
-        train_exp = np.expand_dims(x, axis=(1,2)) 
+        train_exp = np.expand_dims(train_exp, axis=(1,2)) 
         train_exp = np.repeat(train_exp, repeats=H, axis=1)
         train_exp = np.repeat(train_exp, repeats=W, axis=2)
 
