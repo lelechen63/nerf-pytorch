@@ -76,17 +76,19 @@ def get_embedder(multires, i=0):
 
 # Model
 class NeRF(nn.Module):
-    def __init__(self, D=8, W=256, input_ch=3, input_ch_views=3, output_ch=4, skips=[4], use_viewdirs=False):
+    def __init__(self, D=8, W=256, input_ch=3, input_ch_views=3, 
+                    output_ch=4, skips=[4], use_viewdirs=False, input_ch_exp=76):
         """ 
         """
         super(NeRF, self).__init__()
         self.D = D
         self.W = W
         self.input_ch = input_ch
+        self.input_ch_exp = input_ch_exp
         self.input_ch_views = input_ch_views
         self.skips = skips
         self.use_viewdirs = use_viewdirs
-        
+        print(input_ch,'++++')
         self.pts_linears = nn.ModuleList(
             [DenseLayer(input_ch, W, activation="relu")] + [DenseLayer(W, W, activation="relu") if i not in self.skips else DenseLayer(W + input_ch, W, activation="relu") for i in range(D-1)])
         
@@ -107,6 +109,8 @@ class NeRF(nn.Module):
     def forward(self, x):
         input_pts, input_views = torch.split(x, [self.input_ch, self.input_ch_views], dim=-1)
         h = input_pts
+        print(self.pts_linears)
+        print(gg)
         for i, l in enumerate(self.pts_linears):
             h = self.pts_linears[i](h)
             h = F.relu(h)
