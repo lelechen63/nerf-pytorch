@@ -405,9 +405,9 @@ def render_rays(ray_batch,
 
 #     raw = run_network(pts)
     exp_bite  = exp_code_batch.shape[-1]
-    exp_code_batch = exp_code_batch.unsqueeze(1).repeat(1,64, 1).view(-1, exp_bite)
-    print (pts.shape, exp_code_batch.shape, '7777')
-    raw = network_query_fn(pts, exp_code_batch,  viewdirs, network_fn)
+    exp_code_batch_t = exp_code_batch.unsqueeze(1).repeat(1,64, 1).view(-1, exp_bite)
+    print (pts.shape, exp_code_batch_t.shape, '7777')
+    raw = network_query_fn(pts, exp_code_batch_t,  viewdirs, network_fn)
     print ( '77777777777')
     print (N_importance)
     rgb_map, disp_map, acc_map, weights, depth_map = raw2outputs(raw, z_vals, rays_d, raw_noise_std, white_bkgd, pytest=pytest)
@@ -424,8 +424,9 @@ def render_rays(ray_batch,
 
         run_fn = network_fn if network_fine is None else network_fine
 #         raw = run_network(pts, fn=run_fn)
-        print (pts.shape, exp_code_batch.shape,'6666666')
-        raw = network_query_fn(pts, exp_code_batch, viewdirs, run_fn)
+        print (pts.shape, exp_code_batch_t.shape,'6666666')
+        exp_code_batch_t = exp_code_batch.unsqueeze(1).repeat(1,64, 1).view(-1, exp_bite)
+        raw = network_query_fn(pts, exp_code_batch_t, viewdirs, run_fn)
 
         rgb_map, disp_map, acc_map, weights, depth_map = raw2outputs(raw, z_vals, rays_d, raw_noise_std, white_bkgd, pytest=pytest)
 
