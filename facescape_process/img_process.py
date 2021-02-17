@@ -7,7 +7,11 @@ def get_imgs(img_folder, save_folder):
     img_lists = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,\
                   15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,\
                  27, 29, 31, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 47, 48, 50, 51, 52, 53, 54]
-
+    if not os.path.exists(save_folder):
+        os.mkdir(save_folder)
+    save_folder = os.path.join(save_folder,'images')
+    if not os.path.exists(save_folder):
+        os.mkdir(save_folder)
     for i in img_lists:
         img_path = os.path.join( img_folder, '%d.jpg'%i )
         print (i, img_path)
