@@ -46,7 +46,7 @@ def run_network(inputs, exp_inputs, viewdirs, fn, embed_fn, embeddirs_fn, netchu
         input_dirs = viewdirs[:,None].expand(inputs.shape)
         input_dirs_flat = torch.reshape(input_dirs, [-1, input_dirs.shape[-1]])
         embedded_dirs = embeddirs_fn(input_dirs_flat)
-        print(embedded.shape, embedded_dirs.shape)
+        print(embedded.shape, embedded_dirs.shape, exp_inputs.shape)
         embedded = torch.cat([embedded, embedded_dirs, exp_inputs], -1)
 
         print(embedded.shape,'====')
