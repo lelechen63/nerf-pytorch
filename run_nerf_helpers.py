@@ -111,7 +111,7 @@ class NeRF(nn.Module):
         input_pts, input_views, input_ch_exp = torch.split(x, [self.input_ch, self.input_ch_views, self.input_ch_exp], dim=-1)
         print (input_pts.shape, input_views.shape, input_ch_exp.shape)
         # print (gggg)
-        h = torch.cat([input_pts, input_ch_exp])
+        h = torch.cat([input_pts, input_ch_exp], 1)
         for i, l in enumerate(self.pts_linears):
             h = self.pts_linears[i](h)
             h = F.relu(h)
