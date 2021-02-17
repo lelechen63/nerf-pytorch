@@ -406,10 +406,7 @@ def render_rays(ray_batch,
 #     raw = run_network(pts)
     exp_bite  = exp_code_batch.shape[-1]
     exp_code_batch_t = exp_code_batch.unsqueeze(1).repeat(1,64, 1).view(-1, exp_bite)
-    print (pts.shape, exp_code_batch_t.shape, '7777')
     raw = network_query_fn(pts, exp_code_batch_t,  viewdirs, network_fn)
-    print ( '77777777777')
-    print (N_importance)
     rgb_map, disp_map, acc_map, weights, depth_map = raw2outputs(raw, z_vals, rays_d, raw_noise_std, white_bkgd, pytest=pytest)
     if N_importance > 0:
 
@@ -424,7 +421,6 @@ def render_rays(ray_batch,
 
         run_fn = network_fn if network_fine is None else network_fine
 #         raw = run_network(pts, fn=run_fn)
-        print (pts.shape, exp_code_batch_t.shape,'6666666')
         exp_code_batch_t = exp_code_batch.unsqueeze(1).repeat(1,128, 1).view(-1, exp_bite)
         raw = network_query_fn(pts, exp_code_batch_t, viewdirs, run_fn)
 
@@ -701,27 +697,21 @@ def train():
         print('get rays')
         rays = np.stack([get_rays_np(H, W, focal, p) for p in poses[:,:3,:4]], 0) # [N, ro+rd, H, W, 3]
         print('done, concats')
-        print('**********', rays.shape, images.shape)
         rays_rgb = np.concatenate([rays, images[:,None]], 1) # [N, ro+rd+rgb, H, W, 3]
-        print (rays_rgb.shape,'3')
         rays_rgb = np.transpose(rays_rgb, [0,2,3,1,4]) # [N, H, W, ro+rd+rgb, 3]
-        print (rays_rgb.shape,'5')
 
         rays_rgb = np.stack([rays_rgb[i] for i in i_train], 0) # train images only
 
         train_exp = np.stack([img_exps[i] for i in i_train], 0)
-        print(train_exp.shape,'66')
         train_exp = np.expand_dims(train_exp, axis=(1,2)) 
         train_exp = np.repeat(train_exp, repeats=H, axis=1)
         train_exp = np.repeat(train_exp, repeats=W, axis=2)
 
         train_exp = np.reshape(train_exp, [-1, int(exp_bite / 3 ), 3])
-        print (rays_rgb.shape,'6')
 
         rays_rgb =  np.reshape(rays_rgb, [-1,3,3]) # [(N-1)*H*W, ro+rd+rgb, 3]
 
         rays_rgb = np.concatenate((rays_rgb, train_exp), axis = 1) # [(N-1)*H*W, ro+rd+rgb + *(exp_bite)/3, 3]
-        print (rays_rgb.shape,'7')
 
         rays_rgb = rays_rgb.astype(np.float32)
 
@@ -735,11 +725,8 @@ def train():
     # Move training data to GPU
     images = torch.Tensor(images).to(device)
     poses = torch.Tensor(poses).to(device)
-    print ('+++1', images.shape, poses.shape)
     if use_batching:
         rays_rgb = torch.Tensor(rays_rgb).to(device)
-
-    print ('+++1', rays_rgb.shape )
 
     N_iters = 200000 + 1
     print('Begin')
@@ -761,9 +748,7 @@ def train():
             batch = torch.transpose(batch, 0, 1)
             batch_rays, target_s, target_exp = batch[:2], batch[2],  batch[3:]
             target_exp = torch.transpose(target_exp, 0, 1).view(-1, exp_bite)
-            print (batch.shape, '--------')
 
-            print ('+++----++++', batch_rays.shape, target_s.shape, target_exp.shape)
 
 
             i_batch += N_rand
@@ -779,8 +764,6 @@ def train():
             img_i = np.random.choice(i_train)
             target = images[img_i]
             pose = poses[img_i, :3,:4]
-
-            print ('+++++++', target.shape, pose.shape)
 
             if N_rand is not None:
                 rays_o, rays_d = get_rays(H, W, focal, torch.Tensor(pose))  # (H, W, 3), (H, W, 3)
