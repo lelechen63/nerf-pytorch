@@ -409,6 +409,8 @@ def render_rays(ray_batch,
     exp_bite  = exp_code_batch.shape[-1]
     exp_code_batch = exp_code_batch.unsqueeze(1).repeat(1,64, 1).view(-1, exp_bite)
     print (pts.shape, exp_code_batch.shape)
+    print ('!!!!!!!!!')
+    print (ggg)
     raw = network_query_fn(pts, exp_code_batch,  viewdirs, network_fn)
     rgb_map, disp_map, acc_map, weights, depth_map = raw2outputs(raw, z_vals, rays_d, raw_noise_std, white_bkgd, pytest=pytest)
 
@@ -773,6 +775,7 @@ def train():
                 i_batch = 0
 
         else:
+            # buggy, did not add exp_code yet
             # Random from one image
             img_i = np.random.choice(i_train)
             target = images[img_i]
@@ -803,7 +806,6 @@ def train():
                 rays_d = rays_d[select_coords[:, 0], select_coords[:, 1]]  # (N_rand, 3)
                 batch_rays = torch.stack([rays_o, rays_d], 0)  # (2, N_rand, 3)
                 target_s = target[select_coords[:, 0], select_coords[:, 1]]  # (N_rand, 3)
-                print ('!!!!!!!!!!!!!!!!1')
         #####  Core optimization loop  #####
         rgb, disp, acc, extras = render(H, W, focal, chunk=args.chunk, rays=batch_rays, 
                                         exp_code = target_exp, verbose=i < 10, retraw=True,
