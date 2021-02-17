@@ -107,6 +107,8 @@ class NeRF(nn.Module):
             self.output_linear = DenseLayer(W, output_ch, activation="linear")
 
     def forward(self, x):
+        print (x.shape,' ++++')
+        print (gggg)
         input_pts, input_views, input_ch_exp = torch.split(x, [self.input_ch, self.input_ch_views, self.input_ch_exp], dim=-1)
         h = torch.cat([input_pts, input_ch_exp])
         for i, l in enumerate(self.pts_linears):
