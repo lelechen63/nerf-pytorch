@@ -93,7 +93,7 @@ class NeRF(nn.Module):
             [DenseLayer(input_ch + input_ch_exp, W, activation="relu")] + [DenseLayer(W, W, activation="relu") if i not in self.skips else DenseLayer(W + input_ch, W, activation="relu") for i in range(D-1)])
         
         ### Implementation according to the official code release (https://github.com/bmild/nerf/blob/master/run_nerf_helpers.py#L104-L105)
-        self.views_linears = nn.ModuleList([DenseLayer(input_ch_views + W, W//2, activation="relu")])
+        self.views_linears = nn.ModuleList([DenseLayer(input_ch_views + input_ch_exp+ W, W//2, activation="relu")])
 
         ### Implementation according to the paper
         # self.views_linears = nn.ModuleList(
