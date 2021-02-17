@@ -213,7 +213,7 @@ def create_nerf(args):
         model_fine = nn.DataParallel(model_fine).to(device)
         grad_vars += list(model_fine.parameters())
 
-    
+    print (inputs.shape, exp_inputs.shape, '777777')
     network_query_fn = lambda inputs, exp_inputs, viewdirs, network_fn : run_network(inputs, exp_inputs, viewdirs, network_fn,
                                                                 embed_fn=embed_fn,
                                                                 embeddirs_fn=embeddirs_fn,
