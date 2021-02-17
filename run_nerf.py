@@ -52,6 +52,8 @@ def run_network(inputs, exp_inputs, viewdirs, fn, embed_fn, embeddirs_fn, netchu
         print(embedded.shape,'====')
         # print(gggg)
     outputs_flat = batchify(fn, netchunk)(embedded)
+    print ('hahahahhaha')
+    print (ggggg)
     outputs = torch.reshape(outputs_flat, list(inputs.shape[:-1]) + [outputs_flat.shape[-1]])
     return outputs
 
