@@ -213,7 +213,6 @@ def create_nerf(args):
         model_fine = nn.DataParallel(model_fine).to(device)
         grad_vars += list(model_fine.parameters())
 
-    print (inputs.shape, exp_inputs.shape, '777777')
     network_query_fn = lambda inputs, exp_inputs, viewdirs, network_fn : run_network(inputs, exp_inputs, viewdirs, network_fn,
                                                                 embed_fn=embed_fn,
                                                                 embeddirs_fn=embeddirs_fn,
@@ -407,7 +406,7 @@ def render_rays(ray_batch,
 #     raw = run_network(pts)
     exp_bite  = exp_code_batch.shape[-1]
     exp_code_batch = exp_code_batch.unsqueeze(1).repeat(1,64, 1).view(-1, exp_bite)
-    
+    print (pts.shape, exp_code_batch.shape, '7777')
     raw = network_query_fn(pts, exp_code_batch,  viewdirs, network_fn)
     rgb_map, disp_map, acc_map, weights, depth_map = raw2outputs(raw, z_vals, rays_d, raw_noise_std, white_bkgd, pytest=pytest)
     if N_importance > 0:
