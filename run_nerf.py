@@ -406,7 +406,7 @@ def render_rays(ray_batch,
     pts = rays_o[...,None,:] + rays_d[...,None,:] * z_vals[...,:,None] # [N_rays, N_samples, 3]
 
 #     raw = run_network(pts)
-    exp_code_batch = torch.unsqueeze(1).repeat(64, axis = 1).view(-1, exp_bite)
+    exp_code_batch = torch.unsqueeze(1).repeat(1,64, 1).view(-1, exp_bite)
     raw = network_query_fn(pts, exp_code_batch,  viewdirs, network_fn)
     rgb_map, disp_map, acc_map, weights, depth_map = raw2outputs(raw, z_vals, rays_d, raw_noise_std, white_bkgd, pytest=pytest)
 
