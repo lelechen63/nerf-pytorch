@@ -13,6 +13,6 @@ def get_imgs(img_path, save_path):
         print (i, img_path)
         img = cv2.imread(img_path)
         img =  cv2.resize(img, (1728, 2592), interpolation = cv2.INTER_AREA)
-        cv2.imwrite( os.path.join(save_path, '%d.png'%i)  img)
+        cv2.imwrite( os.path.join(save_path, '%d.png'%i),  img)
 img_path = '/home/cxu-serve/p1/lchen63/nerf/data/1/1_neutral'
 get_imgs(img_path, save_path = img_path +'_processed')
