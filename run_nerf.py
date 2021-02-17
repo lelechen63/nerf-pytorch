@@ -51,6 +51,7 @@ def run_network(inputs, exp_inputs, viewdirs, fn, embed_fn, embeddirs_fn, netchu
 
         print(embedded.shape,'====')
         # print(gggg)
+    print ('hahahahhaha')
     outputs_flat = batchify(fn, netchunk)(embedded)
     print ('hahahahhaha')
     print (ggggg)
