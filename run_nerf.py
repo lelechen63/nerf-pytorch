@@ -425,7 +425,7 @@ def render_rays(ray_batch,
         run_fn = network_fn if network_fine is None else network_fine
 #         raw = run_network(pts, fn=run_fn)
         print (pts.shape, exp_code_batch_t.shape,'6666666')
-        exp_code_batch_t = exp_code_batch.unsqueeze(1).repeat(1,64, 1).view(-1, exp_bite)
+        exp_code_batch_t = exp_code_batch.unsqueeze(1).repeat(1,128, 1).view(-1, exp_bite)
         raw = network_query_fn(pts, exp_code_batch_t, viewdirs, run_fn)
 
         rgb_map, disp_map, acc_map, weights, depth_map = raw2outputs(raw, z_vals, rays_d, raw_noise_std, white_bkgd, pytest=pytest)
