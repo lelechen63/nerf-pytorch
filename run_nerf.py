@@ -410,10 +410,10 @@ def render_rays(ray_batch,
     exp_code_batch = exp_code_batch.unsqueeze(1).repeat(1,64, 1).view(-1, exp_bite)
     print (pts.shape, exp_code_batch.shape)
     print ('!!!!!!!!!')
-    print (ggg)
+    
     raw = network_query_fn(pts, exp_code_batch,  viewdirs, network_fn)
     rgb_map, disp_map, acc_map, weights, depth_map = raw2outputs(raw, z_vals, rays_d, raw_noise_std, white_bkgd, pytest=pytest)
-
+    print (ggg)
     if N_importance > 0:
 
         rgb_map_0, disp_map_0, acc_map_0 = rgb_map, disp_map, acc_map
@@ -427,7 +427,7 @@ def render_rays(ray_batch,
 
         run_fn = network_fn if network_fine is None else network_fine
 #         raw = run_network(pts, fn=run_fn)
-        raw = network_query_fn(pts, viewdirs, run_fn)
+        raw = network_query_fn(pts, exp_code_batch, viewdirs, run_fn)
 
         rgb_map, disp_map, acc_map, weights, depth_map = raw2outputs(raw, z_vals, rays_d, raw_noise_std, white_bkgd, pytest=pytest)
 
