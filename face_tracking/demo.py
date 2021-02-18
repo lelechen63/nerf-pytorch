@@ -36,4 +36,4 @@ def process_face_image(image_path):
 
 
 if __name__ == '__main__':
-    process_face_image("expression.jpg")
+    process_face_image("/home/cxu-serve/p1/lchen63/nerf/data/1/1_neutral_processed/images/1.png")
