@@ -558,7 +558,7 @@ def train():
 
     parser = config_parser()
     args = parser.parse_args()
-    exp_bite = 75
+    exp_bite = 63
     args.pretrain = False
     args.exp_bite = exp_bite
     # Multi-GPU
@@ -682,7 +682,7 @@ def train():
             print('Done rendering', testsavedir)
             imageio.mimwrite(os.path.join(testsavedir, 'video.mp4'), to8b(rgbs), fps=30, quality=8)
 
-            return
+            return 
 
     # Prepare raybatch tensor if batching random rays
     N_rand = args.N_rand
@@ -692,8 +692,10 @@ def train():
     img_lists = [os.path.join(args.datadir, 'images', f) for f in sorted(os.listdir(os.path.join(args.datadir, 'images'))) \
     if f.endswith('JPG') or f.endswith('jpg') or f.endswith('png')]
     print (img_lists)
-    print (ggg)
-
+    img_exps = np.zeros((images.shape[0], exp_bite))
+    for i, img_p in enumerate(img_lists):
+        exp_p = img_p.replace('images', 'expression_code')[:-3] +'npy'
+        img_exps[i] = exp_p
     if use_batching:
         # For random ray batching
         print('get rays')
