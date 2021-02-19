@@ -40,7 +40,7 @@ def load_colmap_data(realdir):
             print (name)
             command = 'rm ' + realdir +'/images/' + name
             print (command)
-            # os.system(command)
+            os.system(command)
     
     perm = np.argsort(names)
     for k in imdata:
@@ -75,9 +75,9 @@ def save_poses(basedir, poses, pts3d, perm):
     for k in pts3d:
         pts_arr.append(pts3d[k].xyz)
         cams = [0] * poses.shape[-1]
-        print(pts3d[k].image_ids,'===', len(cams))
+        # print(pts3d[k].image_ids,'===', len(cams))
         for ind in pts3d[k].image_ids:
-            print(len(cams), ind,'----')
+            # print(len(cams), ind,'----')
             if len(cams) < ind - 1:
                 print('ERROR: the correct camera poses for current points cannot be accessed')
                 return
