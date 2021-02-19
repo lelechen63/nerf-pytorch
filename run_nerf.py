@@ -689,7 +689,7 @@ def train():
     use_batching = not args.no_batching
 
     # fake the facial expression
-    img_lists = [os.path.join(basedir, 'images', f) for f in sorted(os.listdir(os.path.join(basedir, 'images'))) \
+    img_lists = [os.path.join(args.datadir, 'images', f) for f in sorted(os.listdir(os.path.join(args.datadir, 'images'))) \
     if f.endswith('JPG') or f.endswith('jpg') or f.endswith('png')]
     print (img_lists)
     print (ggg)
