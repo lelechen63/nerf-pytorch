@@ -695,7 +695,7 @@ def train():
     img_exps = np.zeros((images.shape[0], exp_bite))
     for i, img_p in enumerate(img_lists):
         exp_p = img_p.replace('images', 'expression_code')[:-3] +'npy'
-        img_exps[i] = exp_p
+        img_exps[i] = np.load(exp_p) 
     if use_batching:
         # For random ray batching
         print('get rays')
