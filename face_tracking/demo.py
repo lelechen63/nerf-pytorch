@@ -10,7 +10,8 @@ import os
 visualize_result = True
 
 def process_face_image(image_p):
-    
+    tddfa = TDDFA()
+    # Given a still image path and load to BGR channel
     face_boxes = FaceBoxes()
 
     if os.path.isdir(image_p):
