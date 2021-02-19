@@ -79,7 +79,7 @@ def save_poses(basedir, poses, pts3d, perm):
         print (cams)
         print(pts3d[k].image_ids,'===', len(cams))
         for j, ind in enumerate (pts3d[k].image_ids):
-            print(len(cams), ind,'----')
+            # print(len(cams), ind,'----')
             tmp.add(ind)
             if ind >88:
                 ind = ind -1
