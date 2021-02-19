@@ -72,13 +72,9 @@ def process_face_image(image_p):
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--img_f', type=str, default="")
-    parser.add_argument('--img_p', type=str, default="")
 
     return parser.parse_args()
 
 if __name__ == '__main__':
     config = parse_args()
-    if config.img_f != "":
-        process_face_image(config.img_f)
-    else:
-        process_face_image(config.img_p)
+    process_face_image(config.img_f)
