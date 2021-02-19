@@ -29,7 +29,9 @@ def process_face_image(image_p):
             print(f'Detect {n} faces')
 
             param_lst, roi_box_lst = tddfa(img, boxes)
-
+            print(param_lst)
+            print('+++++')
+            print (roi_box_lst)
             if visualize_result:
                 save_path = image_path.replace('images', 'renderred')
                 save_folder = os.path.dirname(save_path)
