@@ -6,7 +6,7 @@ from TDDFA import TDDFA
 from utils.tddfa_util import _parse_param
 from utils.render_ctypes import render 
 import argparse
-
+import os
 visualize_result = True
 
 def process_face_image(image_p):
