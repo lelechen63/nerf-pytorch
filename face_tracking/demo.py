@@ -30,7 +30,14 @@ def process_face_image(image_p):
 
             param_lst, roi_box_lst = tddfa(img, boxes)
             print(param_lst[0].shape)
-            print('+++++')
+            exp_code = param_lst[0]
+            exp_code = np.expand(exp_code, 0)
+            code_path = image_path.replace('images', 'expression_code')[:-3] +'npy'
+            save_folder = os.path.dirname(code_path)
+            if not os.path.exists(os.path.dirname(code_path)):
+                os.mkdir(os.path.dirname(code_path))
+
+            save_folder = os.path.dirname(code_path)
             # print (roi_box_lst)
             if visualize_result:
                 save_path = image_path.replace('images', 'renderred')
