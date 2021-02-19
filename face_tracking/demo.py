@@ -8,7 +8,7 @@ from utils.render_ctypes import render
 import argparse
 import os
 visualize_result = True
-
+import numpy as np
 def process_face_image(image_p):
     tddfa = TDDFA()
     # Given a still image path and load to BGR channel
