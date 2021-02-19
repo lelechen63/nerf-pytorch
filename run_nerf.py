@@ -689,8 +689,11 @@ def train():
     use_batching = not args.no_batching
 
     # fake the facial expression
-    img_exps = np.zeros((images.shape[0], exp_bite))
-    
+    img_lists = [os.path.join(basedir, 'images', f) for f in sorted(os.listdir(os.path.join(basedir, 'images'))) \
+    if f.endswith('JPG') or f.endswith('jpg') or f.endswith('png')]
+    print (img_lists)
+    print (ggg)
+
     if use_batching:
         # For random ray batching
         print('get rays')
