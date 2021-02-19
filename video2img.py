@@ -27,11 +27,12 @@ def video2img(v_path = None, v_id = None,  img_path = None, step = 50):
         ret,frame = raw.read()
         if not ret:
             break
-        # print(ret,count)
+        print(ret,count)
         # print(frame.shape)
         # if count in  store_step:
         if count % step == 0:
             img_name = os.path.join( img_path, v_id + '_%05d.png'%count)
+            print (img_name)
             cv2.imwrite(img_name, frame)
         count += 1
     # return imgs
