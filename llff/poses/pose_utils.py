@@ -72,22 +72,23 @@ def save_poses(basedir, poses, pts3d, perm):
     print (poses.shape)
     print( pts3d)
     print( perm.shape)
-    tmp =set([])
+    # tmp =set([])
     for k in pts3d:
         pts_arr.append(pts3d[k].xyz)
         cams = [0] * poses.shape[-1]
-        print (cams)
-        print(pts3d[k].image_ids,'===', len(cams))
+        # print (cams)
+        # print(pts3d[k].image_ids,'===', len(cams))
         for ind in pts3d[k].image_ids:
             print(len(cams), ind,'----')
-            tmp.add(ind)
-            # if len(cams) < ind - 1:
-            #     print('ERROR: the correct camera poses for current points cannot be accessed')
-            #     return
-            # cams[ind-1] = 1
+            # tmp.add(ind)
+            if len(cams) <= ind - 1:
+                print('ERROR: the correct camera poses for current points cannot be accessed')
+                # return
+                ind = cams +1
+            cams[ind-1] = 1
         vis_arr.append(cams)
-    print (tmp)
-    print (ggg)
+    # print (tmp)
+    # print (ggg)
     pts_arr = np.array(pts_arr)
     vis_arr = np.array(vis_arr)
     print( 'Points', pts_arr.shape, 'Visibility', vis_arr.shape )
