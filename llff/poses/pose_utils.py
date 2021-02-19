@@ -88,7 +88,7 @@ def save_poses(basedir, poses, pts3d, perm):
                 pts3d[k].image_ids[j] = len(cams)
             cams[ind-1] = 1
         vis_arr.append(cams)
-    print (tmp)
+    # print (tmp)
     # print (ggg)
     pts_arr = np.array(pts_arr)
     vis_arr = np.array(vis_arr)
