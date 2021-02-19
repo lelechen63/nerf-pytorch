@@ -33,7 +33,15 @@ def load_colmap_data(realdir):
     names = [imdata[k].name for k in imdata]
     print(names)
     print( 'Images #', len(names))
-    print (realdir)
+    # remove some faliar images
+    all_img = os.listdir(realdir +'/images')
+    for name in all_img:
+        if name not in names:
+            print (name)
+            command = 'rm ' + realdir +'/images/' + name
+            print (command)
+            # os.system(command)
+    
     perm = np.argsort(names)
     for k in imdata:
         im = imdata[k]
