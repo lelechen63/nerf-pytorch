@@ -36,8 +36,7 @@ def process_face_image(image_p):
             save_folder = os.path.dirname(code_path)
             if not os.path.exists(os.path.dirname(code_path)):
                 os.mkdir(os.path.dirname(code_path))
-
-            save_folder = os.path.dirname(code_path)
+            np.save(code_path, exp_code)
             # print (roi_box_lst)
             if visualize_result:
                 save_path = image_path.replace('images', 'renderred')
