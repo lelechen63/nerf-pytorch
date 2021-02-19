@@ -88,7 +88,7 @@ def save_poses(basedir, poses, pts3d, perm):
                 pts3d[k].image_ids[j] = len(cams)
             cams[ind-1] = 1
         vis_arr.append(cams)
-    # print (tmp)
+    print (tmp)
     # print (ggg)
     pts_arr = np.array(pts_arr)
     vis_arr = np.array(vis_arr)
@@ -102,9 +102,13 @@ def save_poses(basedir, poses, pts3d, perm):
     for i in perm:
         print (i)
         vis = vis_arr[:, i]
+        print ('1')
         zs = zvals[:, i]
+        print ('2')
         zs = zs[vis==1]
+        print ('3')
         close_depth, inf_depth = np.percentile(zs, .1), np.percentile(zs, 99.9)
+        print ('4')
         # print( i, close_depth, inf_depth )
         
         save_arr.append(np.concatenate([poses[..., i].ravel(), np.array([close_depth, inf_depth])], 0))
