@@ -14,7 +14,7 @@ parser.add_argument('--img_path', type=str, default='/home/cxu-serve/u1/lchen63/
 args = parser.parse_args()
 
 
-def video2img(v_path = None, v_id = None,  img_path = None, step = 50):
+def video2img(v_path = None, v_id = None,  img_path = None, step = 25):
     if not os.path.exists(img_path):
         os.mkdir(img_path)
     raw = cv2.VideoCapture(v_path)
