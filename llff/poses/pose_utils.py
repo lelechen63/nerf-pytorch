@@ -107,6 +107,7 @@ def save_poses(basedir, poses, pts3d, perm):
         print ('2')
         zs = zs[vis==1]
         print ('3')
+        print (zs.shape)
         close_depth, inf_depth = np.percentile(zs, .1), np.percentile(zs, 99.9)
         print ('4')
         # print( i, close_depth, inf_depth )
