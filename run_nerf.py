@@ -673,6 +673,14 @@ def train():
     # Move testing data to GPU
     render_poses = torch.Tensor(render_poses).to(device)
 
+    # define test_exp
+    test_exp = np.stack([img_exps[i] for i in i_test], 0)
+    test_exp = np.expand_dims(test_exp, axis=(1,2)) 
+    test_exp = np.repeat(test_exp, repeats=H, axis=1)
+    test_exp = np.repeat(test_exp, repeats=W, axis=2)
+
+    test_exp = np.reshape(test_exp, [-1, int(exp_bite / 3 ), 3])
+
     # Short circuit if only rendering out from trained model
     if args.render_only:
         print('RENDER ONLY')
@@ -680,13 +688,7 @@ def train():
             if args.render_test:
                 # render_test switches to test poses
                 images = images[i_test]
-                test_exp = np.stack([img_exps[i] for i in i_test], 0)
-                test_exp = np.expand_dims(test_exp, axis=(1,2)) 
-                test_exp = np.repeat(test_exp, repeats=H, axis=1)
-                test_exp = np.repeat(test_exp, repeats=W, axis=2)
-
-                test_exp = np.reshape(test_exp, [-1, int(exp_bite / 3 ), 3])
-
+            
             else:
                 # Default is smoother render_poses path
                 images = None
