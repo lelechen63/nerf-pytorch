@@ -306,7 +306,7 @@ def load_llff_data(basedir, factor=8, recenter=True, bd_factor=.75, spherify=Fal
         # Generate poses for spiral path
         render_poses = render_path_spiral(c2w_path, up, rads, focal, zdelta, zrate=.5, rots=N_rots, N=N_views)
         
-        
+    print ('!!!!!!!!!!', render_poses.shape)
     render_poses = np.array(render_poses).astype(np.float32)
 
     c2w = poses_avg(poses)
