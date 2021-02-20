@@ -128,7 +128,7 @@ def render(H, W, focal, chunk=1024*32, rays=None, exp_code = None,  c2w=None, nd
     if use_viewdirs:
         rays = torch.cat([rays, viewdirs], -1)
 
-    exp_code = exp_code.float()
+    # exp_code = exp_code.float()
     # Render and reshape
     print (rays.shape, exp_code.shape,'+++++++++++++++++')
     all_ret = batchify_rays(rays,exp_code, chunk, **kwargs)
