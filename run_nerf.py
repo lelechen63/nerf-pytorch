@@ -855,6 +855,7 @@ def train():
 
         if i%args.i_video==0 :#and i > 0:
             # Turn on testing mode
+            print(render_poses.shape, test_exp.shape,'--------')
             with torch.no_grad():
                 rgbs, disps = render_path(render_poses, hwf, args.chunk, test_exp, render_kwargs_test)
             print('Done, saving', rgbs.shape, disps.shape)
