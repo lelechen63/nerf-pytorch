@@ -590,6 +590,7 @@ def train():
         i_val = i_test
         i_train = np.array([i for i in np.arange(int(images.shape[0])) if
                         (i not in i_test and i not in i_val)])
+        print (len(i_train),len(i_test),'!!!!!!!!!!!')
         # i_test: [ 0  8 16]
         # i_train: [ 1  2  3  4  5  6  7  9 10 11 12 13 14 15 17 18 19]
        
