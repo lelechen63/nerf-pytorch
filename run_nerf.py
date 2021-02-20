@@ -146,6 +146,8 @@ def render_path(render_poses, hwf, chunk, target_exp, render_kwargs, gt_imgs=Non
 
     H, W, focal = hwf
     print(target_exp.shape,'7777777')
+    while target_exp.shape[0] < render_poses.shape[0]:
+        target_exp = target_exp.extend(target_exp)
     # target_exp = torch.tensor(target_exp).to(device).view(target_exp.shape[0], -1)
 
     if render_factor!=0:
@@ -162,7 +164,7 @@ def render_path(render_poses, hwf, chunk, target_exp, render_kwargs, gt_imgs=Non
     for i, c2w in enumerate(tqdm(render_poses)):
         print(i, time.time() - t)
         t = time.time()
-        rgb, disp, acc, _ = render(H, W, focal, chunk=chunk, exp_code = target_exp, c2w=c2w[:3,:4], **render_kwargs)
+        rgb, disp, acc, _ = render(H, W, focal, chunk=chunk, exp_code = target_exp[i], c2w=c2w[:3,:4], **render_kwargs)
         rgbs.append(rgb.cpu().numpy())
         disps.append(disp.cpu().numpy())
         if i==0:
@@ -590,7 +592,6 @@ def train():
         i_val = i_test
         i_train = np.array([i for i in np.arange(int(images.shape[0])) if
                         (i not in i_test and i not in i_val)])
-        print (len(i_train),len(i_test),'!!!!!!!!!!!')
         # i_test: [ 0  8 16]
         # i_train: [ 1  2  3  4  5  6  7  9 10 11 12 13 14 15 17 18 19]
        
@@ -611,10 +612,8 @@ def train():
     H, W, focal = hwf
     H, W = int(H), int(W)
     hwf = [H, W, focal]
-    print (render_poses.shape,'22222')
     if args.render_test:
         render_poses = np.array(poses[i_test])
-    print(render_poses.shape, '111111')
     # Create log dir and copy the config file
     basedir = args.basedir
     expname = args.expname
@@ -632,8 +631,6 @@ def train():
     # fake the facial expression
     img_lists = [os.path.join(args.datadir, 'images', f) for f in sorted(os.listdir(os.path.join(args.datadir, 'images'))) \
     if f.endswith('JPG') or f.endswith('jpg') or f.endswith('png')]
-    print (len(img_lists))
-    print (images.shape,render_poses.shape, '777777777')
     img_exps = np.zeros((images.shape[0], exp_bite))
     for i, img_p in enumerate(img_lists):
         exp_p = img_p.replace('images', 'expression_code')[:-3] +'npy'

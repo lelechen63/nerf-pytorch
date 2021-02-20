@@ -308,8 +308,6 @@ def load_llff_data(basedir, factor=8, recenter=True, bd_factor=.75, spherify=Fal
         
     
     render_poses = np.array(render_poses).astype(np.float32)
-    print ('!!!!!!!!!!', render_poses.shape)
-    print (ggg)
     c2w = poses_avg(poses)
     print('Data:')
     print(poses.shape, images.shape, bds.shape)
