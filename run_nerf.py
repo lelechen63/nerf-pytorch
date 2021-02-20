@@ -142,6 +142,7 @@ def render(H, W, focal, chunk=1024*32, rays=None, exp_code = None,  c2w=None, nd
 def render_path(render_poses, hwf, chunk, target_exp, render_kwargs, gt_imgs=None, savedir=None, render_factor=0):
 
     H, W, focal = hwf
+    target_exp = torch.tensor(target_exp).to(device)
 
     if render_factor!=0:
         # Render downsampled for speed
@@ -680,7 +681,7 @@ def train():
     test_exp = np.repeat(test_exp, repeats=W, axis=2)
 
     test_exp = np.reshape(test_exp, [-1, int(exp_bite / 3 ), 3])
-
+    
     # Short circuit if only rendering out from trained model
     if args.render_only:
         print('RENDER ONLY')
