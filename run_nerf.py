@@ -145,7 +145,8 @@ def render(H, W, focal, chunk=1024*32, rays=None, exp_code = None,  c2w=None, nd
 def render_path(render_poses, hwf, chunk, target_exp, render_kwargs, gt_imgs=None, savedir=None, render_factor=0):
 
     H, W, focal = hwf
-    target_exp = torch.tensor(target_exp).to(device).view(target_exp.shape[0], -1)
+    print(target_exp.shape,'7777777')
+    # target_exp = torch.tensor(target_exp).to(device).view(target_exp.shape[0], -1)
 
     if render_factor!=0:
         # Render downsampled for speed
@@ -679,12 +680,12 @@ def train():
     render_poses = torch.Tensor(render_poses).to(device)
 
     # define test_exp
-    test_exp = np.stack([img_exps[i] for i in i_test], 0)
-    test_exp = np.expand_dims(test_exp, axis=(1,2)) 
-    test_exp = np.repeat(test_exp, repeats=H, axis=1)
-    test_exp = np.repeat(test_exp, repeats=W, axis=2)
+    # test_exp = np.stack([img_exps[i] for i in i_test], 0)
+    # test_exp = np.expand_dims(test_exp, axis=(1,2)) 
+    # test_exp = np.repeat(test_exp, repeats=H, axis=1)
+    # test_exp = np.repeat(test_exp, repeats=W, axis=2)
 
-    test_exp = np.reshape(test_exp, [-1, int(exp_bite / 3 ), 3])
+    # test_exp = np.reshape(test_exp, [-1, int(exp_bite / 3 ), 3])
     
     # Short circuit if only rendering out from trained model
     if args.render_only:
@@ -702,7 +703,7 @@ def train():
             os.makedirs(testsavedir, exist_ok=True)
             print('test poses shape', render_poses.shape)
 
-            rgbs, _ = render_path(render_poses, hwf, args.chunk, test_exp, render_kwargs_test, gt_imgs=images, savedir=testsavedir, render_factor=args.render_factor)
+            rgbs, _ = render_path(render_poses, hwf, args.chunk, img_exps, render_kwargs_test, gt_imgs=images, savedir=testsavedir, render_factor=args.render_factor)
             print('Done rendering', testsavedir)
             imageio.mimwrite(os.path.join(testsavedir, 'video.mp4'), to8b(rgbs), fps=30, quality=8)
 
@@ -856,9 +857,9 @@ def train():
 
         if i%args.i_video==0 :#and i > 0:
             # Turn on testing mode
-            print(render_poses.shape, test_exp.shape,'--------')
+            # print(render_poses.shape, test_exp.shape,'--------')
             with torch.no_grad():
-                rgbs, disps = render_path(render_poses, hwf, args.chunk, test_exp, render_kwargs_test)
+                rgbs, disps = render_path(render_poses, hwf, args.chunk, img_exps, render_kwargs_test)
             print('Done, saving', rgbs.shape, disps.shape)
             moviebase = os.path.join(basedir, expname, '{}_spiral_{:06d}_'.format(expname, i))
             imageio.mimwrite(moviebase + 'rgb.mp4', to8b(rgbs), fps=30, quality=8)
@@ -876,7 +877,7 @@ def train():
             os.makedirs(testsavedir, exist_ok=True)
             print('test poses shape', poses[i_test].shape)
             with torch.no_grad():
-                render_path(torch.Tensor(poses[i_test]).to(device), hwf, args.chunk, test_exp, render_kwargs_test, gt_imgs=images[i_test], savedir=testsavedir)
+                render_path(torch.Tensor(poses[i_test]).to(device), hwf, args.chunk, img_exps[i_test], render_kwargs_test, gt_imgs=images[i_test], savedir=testsavedir)
             print('Saved test set')
 
 
