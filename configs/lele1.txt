@@ -1,7 +1,7 @@
 
 expname = lele1_test
 basedir = ./logs
-datadir = ./data/lele_data1
+datadir = ./data/lele_data
 dataset_type = llff
 
 factor = 8
