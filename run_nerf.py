@@ -603,33 +603,6 @@ def train():
             near = 0.
             far = 1.
         print('NEAR FAR', near, far)
-
-    elif args.dataset_type == 'blender':
-        images, poses, render_poses, hwf, i_split = load_blender_data(args.datadir, args.half_res, args.testskip)
-        print('Loaded blender', images.shape, render_poses.shape, hwf, args.datadir)
-        i_train, i_val, i_test = i_split
-
-        near = 2.
-        far = 6.
-
-        if args.white_bkgd:
-            images = images[...,:3]*images[...,-1:] + (1.-images[...,-1:])
-        else:
-            images = images[...,:3]
-
-    elif args.dataset_type == 'deepvoxels':
-
-        images, poses, render_poses, hwf, i_split = load_dv_data(scene=args.shape,
-                                                                 basedir=args.datadir,
-                                                                 testskip=args.testskip)
-
-        print('Loaded deepvoxels', images.shape, render_poses.shape, hwf, args.datadir)
-        i_train, i_val, i_test = i_split
-
-        hemi_R = np.mean(np.linalg.norm(poses[:,:3,-1], axis=-1))
-        near = hemi_R-1.
-        far = hemi_R+1.
-
     else:
         print('Unknown dataset type', args.dataset_type, 'exiting')
         return
@@ -638,10 +611,10 @@ def train():
     H, W, focal = hwf
     H, W = int(H), int(W)
     hwf = [H, W, focal]
-
+    print (render_poses.shape,'22222')
     if args.render_test:
         render_poses = np.array(poses[i_test])
-
+    print(render_poses.shape, '111111')
     # Create log dir and copy the config file
     basedir = args.basedir
     expname = args.expname
