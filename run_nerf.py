@@ -660,7 +660,7 @@ def train():
     img_lists = [os.path.join(args.datadir, 'images', f) for f in sorted(os.listdir(os.path.join(args.datadir, 'images'))) \
     if f.endswith('JPG') or f.endswith('jpg') or f.endswith('png')]
     print (len(img_lists))
-    print (images.shape,'777777777')
+    print (images.shape,render_poses.shape, '777777777')
     img_exps = np.zeros((images.shape[0], exp_bite))
     for i, img_p in enumerate(img_lists):
         exp_p = img_p.replace('images', 'expression_code')[:-3] +'npy'
@@ -723,9 +723,7 @@ def train():
         print('done, concats')
         rays_rgb = np.concatenate([rays, images[:,None]], 1) # [N, ro+rd+rgb, H, W, 3]
         rays_rgb = np.transpose(rays_rgb, [0,2,3,1,4]) # [N, H, W, ro+rd+rgb, 3]
-        print (rays_rgb.shape,'!!!!!!!!')
         rays_rgb = np.stack([rays_rgb[i] for i in i_train], 0) # train images only
-        print (rays_rgb.shape,'!!!!!!!!')
 
         train_exp = np.stack([img_exps[i] for i in i_train], 0)
         train_exp = np.expand_dims(train_exp, axis=(1,2)) 
