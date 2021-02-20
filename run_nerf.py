@@ -59,6 +59,7 @@ def batchify_rays(rays_flat, exp_code,  chunk=1024*32, **kwargs):
     """
     all_ret = {}
     for i in range(0, rays_flat.shape[0], chunk):
+        print (rays_flat[i:i+chunk].shape, exp_code[i:i+chunk].shape,'=======================')
         ret = render_rays(rays_flat[i:i+chunk], exp_code[i:i+chunk], **kwargs)
         for k in ret:
             if k not in all_ret:
@@ -129,6 +130,7 @@ def render(H, W, focal, chunk=1024*32, rays=None, exp_code = None,  c2w=None, nd
 
     exp_code = exp_code.float()
     # Render and reshape
+    print (rays.shape, exp_code.shape,'+++++++++++++++++')
     all_ret = batchify_rays(rays,exp_code, chunk, **kwargs)
     for k in all_ret:
         k_sh = list(sh[:-1]) + list(all_ret[k].shape[1:])
