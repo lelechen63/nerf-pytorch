@@ -157,6 +157,7 @@ def render_path(render_poses, hwf, chunk, target_exp, render_kwargs, gt_imgs=Non
     disps = []
 
     t = time.time()
+    print (render_poses.shape,'********')
     for i, c2w in enumerate(tqdm(render_poses)):
         print(i, time.time() - t)
         t = time.time()
