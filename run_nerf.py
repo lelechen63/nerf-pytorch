@@ -143,7 +143,7 @@ def render(H, W, focal, chunk=1024*32, rays=None, exp_code = None,  c2w=None, nd
 def render_path(render_poses, hwf, chunk, target_exp, render_kwargs, gt_imgs=None, savedir=None, render_factor=0):
 
     H, W, focal = hwf
-    target_exp = torch.tensor(target_exp).to(device)
+    target_exp = torch.tensor(target_exp).to(device).view(target_exp.shape[0], -1)
 
     if render_factor!=0:
         # Render downsampled for speed
