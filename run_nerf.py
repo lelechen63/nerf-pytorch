@@ -139,7 +139,7 @@ def render(H, W, focal, chunk=1024*32, rays=None, exp_code = None,  c2w=None, nd
     return ret_list + [ret_dict]
 
 
-def render_path(render_poses, hwf, chunk, render_kwargs, gt_imgs=None, savedir=None, render_factor=0):
+def render_path(render_poses, hwf, chunk, target_exp, render_kwargs, gt_imgs=None, savedir=None, render_factor=0):
 
     H, W, focal = hwf
 
@@ -156,7 +156,7 @@ def render_path(render_poses, hwf, chunk, render_kwargs, gt_imgs=None, savedir=N
     for i, c2w in enumerate(tqdm(render_poses)):
         print(i, time.time() - t)
         t = time.time()
-        rgb, disp, acc, _ = render(H, W, focal, chunk=chunk, c2w=c2w[:3,:4], **render_kwargs)
+        rgb, disp, acc, _ = render(H, W, focal, chunk=chunk, exp_code = target_exp, c2w=c2w[:3,:4], **render_kwargs)
         rgbs.append(rgb.cpu().numpy())
         disps.append(disp.cpu().numpy())
         if i==0:
@@ -649,6 +649,16 @@ def train():
         with open(f, 'w') as file:
             file.write(open(args.config, 'r').read())
 
+    # fake the facial expression
+    img_lists = [os.path.join(args.datadir, 'images', f) for f in sorted(os.listdir(os.path.join(args.datadir, 'images'))) \
+    if f.endswith('JPG') or f.endswith('jpg') or f.endswith('png')]
+    print (img_lists)
+    img_exps = np.zeros((images.shape[0], exp_bite))
+    for i, img_p in enumerate(img_lists):
+        exp_p = img_p.replace('images', 'expression_code')[:-3] +'npy'
+        img_exps[i] = np.load(exp_p) 
+
+
     # Create nerf model
     render_kwargs_train, render_kwargs_test, start, grad_vars, optimizer = create_nerf(args)
     global_step = start
@@ -670,6 +680,13 @@ def train():
             if args.render_test:
                 # render_test switches to test poses
                 images = images[i_test]
+                test_exp = np.stack([img_exps[i] for i in i_test], 0)
+                test_exp = np.expand_dims(test_exp, axis=(1,2)) 
+                test_exp = np.repeat(test_exp, repeats=H, axis=1)
+                test_exp = np.repeat(test_exp, repeats=W, axis=2)
+
+                test_exp = np.reshape(test_exp, [-1, int(exp_bite / 3 ), 3])
+
             else:
                 # Default is smoother render_poses path
                 images = None
@@ -678,7 +695,7 @@ def train():
             os.makedirs(testsavedir, exist_ok=True)
             print('test poses shape', render_poses.shape)
 
-            rgbs, _ = render_path(render_poses, hwf, args.chunk, render_kwargs_test, gt_imgs=images, savedir=testsavedir, render_factor=args.render_factor)
+            rgbs, _ = render_path(render_poses, hwf, args.chunk, test_exp, render_kwargs_test, gt_imgs=images, savedir=testsavedir, render_factor=args.render_factor)
             print('Done rendering', testsavedir)
             imageio.mimwrite(os.path.join(testsavedir, 'video.mp4'), to8b(rgbs), fps=30, quality=8)
 
@@ -688,14 +705,7 @@ def train():
     N_rand = args.N_rand
     use_batching = not args.no_batching
 
-    # fake the facial expression
-    img_lists = [os.path.join(args.datadir, 'images', f) for f in sorted(os.listdir(os.path.join(args.datadir, 'images'))) \
-    if f.endswith('JPG') or f.endswith('jpg') or f.endswith('png')]
-    print (img_lists)
-    img_exps = np.zeros((images.shape[0], exp_bite))
-    for i, img_p in enumerate(img_lists):
-        exp_p = img_p.replace('images', 'expression_code')[:-3] +'npy'
-        img_exps[i] = np.load(exp_p) 
+    
     if use_batching:
         # For random ray batching
         print('get rays')
@@ -837,10 +847,10 @@ def train():
             }, path)
             print('Saved checkpoints at', path)
 
-        if i%args.i_video==0 and i > 0:
+        if i%args.i_video==0 :#and i > 0:
             # Turn on testing mode
             with torch.no_grad():
-                rgbs, disps = render_path(render_poses, hwf, args.chunk, render_kwargs_test)
+                rgbs, disps = render_path(render_poses, hwf, args.chunk, test_exp, render_kwargs_test)
             print('Done, saving', rgbs.shape, disps.shape)
             moviebase = os.path.join(basedir, expname, '{}_spiral_{:06d}_'.format(expname, i))
             imageio.mimwrite(moviebase + 'rgb.mp4', to8b(rgbs), fps=30, quality=8)
@@ -853,12 +863,12 @@ def train():
             #     render_kwargs_test['c2w_staticcam'] = None
             #     imageio.mimwrite(moviebase + 'rgb_still.mp4', to8b(rgbs_still), fps=30, quality=8)
 
-        if i%args.i_testset==0 and i > 0:
+        if i%args.i_testset==0 :#and i > 0:
             testsavedir = os.path.join(basedir, expname, 'testset_{:06d}'.format(i))
             os.makedirs(testsavedir, exist_ok=True)
             print('test poses shape', poses[i_test].shape)
             with torch.no_grad():
-                render_path(torch.Tensor(poses[i_test]).to(device), hwf, args.chunk, render_kwargs_test, gt_imgs=images[i_test], savedir=testsavedir)
+                render_path(torch.Tensor(poses[i_test]).to(device), hwf, args.chunk, test_exp, render_kwargs_test, gt_imgs=images[i_test], savedir=testsavedir)
             print('Saved test set')
 
 
