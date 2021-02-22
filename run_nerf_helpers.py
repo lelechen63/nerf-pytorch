@@ -91,7 +91,7 @@ class NeRF(nn.Module):
         self.exp_linear = nn.Sequential(
                         nn.Linear(input_ch_exp , W),
                         nn.ReLU(True),
-                        nn.Linear(input_ch_exp , W),
+                        nn.Linear(W , W),
                         nn.ReLU(True))
         self.pts_linears = nn.ModuleList(
             [DenseLayer(input_ch + W, W, activation="relu")] + [DenseLayer(W, W, activation="relu") if i not in self.skips else DenseLayer(W + input_ch + W, W, activation="relu") for i in range(D-1)])
@@ -115,6 +115,7 @@ class NeRF(nn.Module):
         input_pts, input_views, input_ch_exp = torch.split(x, [self.input_ch, self.input_ch_views, self.input_ch_exp], dim=-1)
         # print (input_ch_exp[0])
         # print (gggg)
+        # print (input_ch_exp.shape)
         exp = self.exp_linear(input_ch_exp)
         h = torch.cat([input_pts, exp], 1)
         for i, l in enumerate(self.pts_linears):
