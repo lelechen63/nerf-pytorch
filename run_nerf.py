@@ -59,7 +59,7 @@ def batchify_rays(rays_flat, exp_code,  chunk=1024*32, **kwargs):
     """
     all_ret = {}
     for i in range(0, rays_flat.shape[0], chunk):
-        print (rays_flat[i:i+chunk].shape, exp_code[i:i+chunk].shape,'=======================')
+        # print (rays_flat[i:i+chunk].shape, exp_code[i:i+chunk].shape,'=======================')
         ret = render_rays(rays_flat[i:i+chunk], exp_code[i:i+chunk], **kwargs)
         for k in ret:
             if k not in all_ret:
@@ -97,7 +97,7 @@ def render(H, W, focal, chunk=1024*32, rays=None, exp_code = None,  c2w=None, nd
       acc_map: [batch_size]. Accumulated opacity (alpha) along a ray.
       extras: dict with everything returned by render_rays().
     """
-    print ( exp_code.shape,'++++++++++++++++++++')
+    # print ( exp_code.shape,'++++++++++++++++++++')
     if c2w is not None:
         # special case to render full image
         rays_o, rays_d = get_rays(H, W, focal, c2w)
@@ -132,7 +132,7 @@ def render(H, W, focal, chunk=1024*32, rays=None, exp_code = None,  c2w=None, nd
     # Render and reshape
     if c2w is not None:
         exp_code =exp_code.unsqueeze(0).repeat(rays.shape[0],1)
-    print (rays.shape, exp_code.shape,'+++++++++++++++++')
+    # print (rays.shape, exp_code.shape,'+++++++++++++++++')
     all_ret = batchify_rays(rays,exp_code, chunk, **kwargs)
     for k in all_ret:
         k_sh = list(sh[:-1]) + list(all_ret[k].shape[1:])
@@ -162,11 +162,11 @@ def render_path(render_poses, hwf, chunk, target_exp, render_kwargs, gt_imgs=Non
     disps = []
 
     t = time.time()
-    print (render_poses.shape,'********')
+    # print (render_poses.shape,'********')
     for i, c2w in enumerate(tqdm(render_poses)):
         print(i, time.time() - t)
         t = time.time()
-        print ('!!!!!!!!!',  c2w[:3,:4].shape, target_exp[i].shape)
+        # print ('!!!!!!!!!',  c2w[:3,:4].shape, target_exp[i].shape)
         rgb, disp, acc, _ = render(H, W, focal, chunk=chunk, exp_code = target_exp[i], c2w=c2w[:3,:4], **render_kwargs)
         rgbs.append(rgb.cpu().numpy())
         disps.append(disp.cpu().numpy())
@@ -557,9 +557,9 @@ def config_parser():
                         help='frequency of tensorboard image logging')
     parser.add_argument("--i_weights", type=int, default=10000, 
                         help='frequency of weight ckpt saving')
-    parser.add_argument("--i_testset", type=int, default=5, 
+    parser.add_argument("--i_testset", type=int, default=5000, 
                         help='frequency of testset saving')
-    parser.add_argument("--i_video",   type=int, default=5, 
+    parser.add_argument("--i_video",   type=int, default=5000, 
                         help='frequency of render_poses video saving')
 
     return parser
