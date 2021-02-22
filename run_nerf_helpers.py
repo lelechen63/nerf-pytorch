@@ -88,9 +88,13 @@ class NeRF(nn.Module):
         self.input_ch_views = input_ch_views
         self.skips = skips
         self.use_viewdirs = use_viewdirs
-
+        self.exp_linear = nn.Sequential(
+                        nn.Linear(input_ch_exp , w),
+                        nn.ReLU(True),
+                        nn.Linear(input_ch_exp , w),
+                        nn.ReLU(True))
         self.pts_linears = nn.ModuleList(
-            [DenseLayer(input_ch + input_ch_exp, W, activation="relu")] + [DenseLayer(W, W, activation="relu") if i not in self.skips else DenseLayer(W + input_ch + input_ch_exp, W, activation="relu") for i in range(D-1)])
+            [DenseLayer(input_ch + w, W, activation="relu")] + [DenseLayer(W, W, activation="relu") if i not in self.skips else DenseLayer(W + input_ch + w, W, activation="relu") for i in range(D-1)])
         
         ### Implementation according to the official code release (https://github.com/bmild/nerf/blob/master/run_nerf_helpers.py#L104-L105)
         self.views_linears = nn.ModuleList([DenseLayer(input_ch_views + W, W//2, activation="relu")])
@@ -109,14 +113,15 @@ class NeRF(nn.Module):
     def forward(self, x):
         
         input_pts, input_views, input_ch_exp = torch.split(x, [self.input_ch, self.input_ch_views, self.input_ch_exp], dim=-1)
-        print (input_ch_exp[0])
+        # print (input_ch_exp[0])
         # print (gggg)
-        h = torch.cat([input_pts, input_ch_exp], 1)
+        exp = self.exp_linear(input_ch_exp)
+        h = torch.cat([input_pts, exp], 1)
         for i, l in enumerate(self.pts_linears):
             h = self.pts_linears[i](h)
             h = F.relu(h)
             if i in self.skips:
-                h = torch.cat([input_pts, input_ch_exp, h], -1)
+                h = torch.cat([input_pts, exp, h], -1)
 
         if self.use_viewdirs:
             alpha = self.alpha_linear(h)
