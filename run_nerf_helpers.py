@@ -89,9 +89,9 @@ class NeRF(nn.Module):
         self.skips = skips
         self.use_viewdirs = use_viewdirs
         self.exp_linear = nn.Sequential(
-                        nn.Linear(input_ch_exp , w),
+                        nn.Linear(input_ch_exp , W),
                         nn.ReLU(True),
-                        nn.Linear(input_ch_exp , w),
+                        nn.Linear(input_ch_exp , W),
                         nn.ReLU(True))
         self.pts_linears = nn.ModuleList(
             [DenseLayer(input_ch + w, W, activation="relu")] + [DenseLayer(W, W, activation="relu") if i not in self.skips else DenseLayer(W + input_ch + w, W, activation="relu") for i in range(D-1)])
