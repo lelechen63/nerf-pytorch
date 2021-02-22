@@ -94,7 +94,7 @@ class NeRF(nn.Module):
                         nn.Linear(input_ch_exp , W),
                         nn.ReLU(True))
         self.pts_linears = nn.ModuleList(
-            [DenseLayer(input_ch + w, W, activation="relu")] + [DenseLayer(W, W, activation="relu") if i not in self.skips else DenseLayer(W + input_ch + w, W, activation="relu") for i in range(D-1)])
+            [DenseLayer(input_ch + W, W, activation="relu")] + [DenseLayer(W, W, activation="relu") if i not in self.skips else DenseLayer(W + input_ch + W, W, activation="relu") for i in range(D-1)])
         
         ### Implementation according to the official code release (https://github.com/bmild/nerf/blob/master/run_nerf_helpers.py#L104-L105)
         self.views_linears = nn.ModuleList([DenseLayer(input_ch_views + W, W//2, activation="relu")])
