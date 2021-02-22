@@ -164,7 +164,7 @@ def render_path(render_poses, hwf, chunk, target_exp, render_kwargs, gt_imgs=Non
     for i, c2w in enumerate(tqdm(render_poses)):
         print(i, time.time() - t)
         t = time.time()
-        print ('!!!!!!!!!', c2w[:3,:4].shape, target_exp[i].shape)
+        print ('!!!!!!!!!', chunk.shape, c2w[:3,:4].shape, target_exp[i].shape)
         rgb, disp, acc, _ = render(H, W, focal, chunk=chunk, exp_code = target_exp[i], c2w=c2w[:3,:4], **render_kwargs)
         rgbs.append(rgb.cpu().numpy())
         disps.append(disp.cpu().numpy())
