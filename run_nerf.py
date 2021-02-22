@@ -635,9 +635,11 @@ def train():
     img_lists = [os.path.join(args.datadir, 'images', f) for f in sorted(os.listdir(os.path.join(args.datadir, 'images'))) \
     if f.endswith('JPG') or f.endswith('jpg') or f.endswith('png')]
     img_exps = np.zeros((images.shape[0], exp_bite))
-    for i, img_p in enumerate(img_lists):
-        exp_p = img_p.replace('images', 'expression_code')[:-3] +'npy'
-        img_exps[i] = np.load(exp_p) 
+    
+    
+    # for i, img_p in enumerate(img_lists):
+    #     exp_p = img_p.replace('images', 'expression_code')[:-3] +'npy'
+    #     img_exps[i] = np.load(exp_p) 
 
 
     # Create nerf model
