@@ -128,8 +128,10 @@ def render(H, W, focal, chunk=1024*32, rays=None, exp_code = None,  c2w=None, nd
     if use_viewdirs:
         rays = torch.cat([rays, viewdirs], -1)
 
-    # exp_code = exp_code.float()
+    exp_code = exp_code.float()
     # Render and reshape
+    if c2w is not None:
+        exp_code =exp_code.unsqueeze(0).repeat(rays.shape[0],1)
     print (rays.shape, exp_code.shape,'+++++++++++++++++')
     all_ret = batchify_rays(rays,exp_code, chunk, **kwargs)
     for k in all_ret:
@@ -148,7 +150,7 @@ def render_path(render_poses, hwf, chunk, target_exp, render_kwargs, gt_imgs=Non
     print(target_exp.shape,'7777777')
     while target_exp.shape[0] < render_poses.shape[0]:
         target_exp = target_exp.extend(target_exp)
-    # target_exp = torch.tensor(target_exp).to(device).view(target_exp.shape[0], -1)
+    target_exp = torch.tensor(target_exp).to(device).view(target_exp.shape[0], -1)
 
     if render_factor!=0:
         # Render downsampled for speed
@@ -164,7 +166,7 @@ def render_path(render_poses, hwf, chunk, target_exp, render_kwargs, gt_imgs=Non
     for i, c2w in enumerate(tqdm(render_poses)):
         print(i, time.time() - t)
         t = time.time()
-        print ('!!!!!!!!!', chunk.shape, c2w[:3,:4].shape, target_exp[i].shape)
+        print ('!!!!!!!!!',  c2w[:3,:4].shape, target_exp[i].shape)
         rgb, disp, acc, _ = render(H, W, focal, chunk=chunk, exp_code = target_exp[i], c2w=c2w[:3,:4], **render_kwargs)
         rgbs.append(rgb.cpu().numpy())
         disps.append(disp.cpu().numpy())
