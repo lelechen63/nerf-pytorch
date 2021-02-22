@@ -639,7 +639,7 @@ def train():
     
     for i, img_p in enumerate(img_lists):
         # exp_p = img_p.replace('images', 'expression_code')[:-3] +'npy'
-        exp_p ='/home/cxu-serve/u1/lchen63/github/nerf-pytorch/data/lele_data/renderred/IMG_0267_00080.png'
+        exp_p ='/home/cxu-serve/u1/lchen63/github/nerf-pytorch/data/lele_data/expression_code/IMG_0267_00000.npy'
         img_exps[i] = np.load(exp_p) 
 
 
