@@ -109,6 +109,7 @@ class NeRF(nn.Module):
     def forward(self, x):
         
         input_pts, input_views, input_ch_exp = torch.split(x, [self.input_ch, self.input_ch_views, self.input_ch_exp], dim=-1)
+        print (input_ch_exp[0])
         # print (gggg)
         h = torch.cat([input_pts, input_ch_exp], 1)
         for i, l in enumerate(self.pts_linears):

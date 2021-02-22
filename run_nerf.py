@@ -748,8 +748,6 @@ def train():
             batch_rays, target_s, target_exp = batch[:2], batch[2],  batch[3:]
             target_exp = torch.transpose(target_exp, 0, 1).view(-1, exp_bite)
 
-
-
             i_batch += N_rand
             if i_batch >= rays_rgb.shape[0]:
                 print("Shuffle data after an epoch!")
