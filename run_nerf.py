@@ -636,7 +636,7 @@ def train():
     # fake the facial expression
     img_lists = [os.path.join(args.datadir, 'images', f) for f in sorted(os.listdir(os.path.join(args.datadir, 'images'))) \
     if f.endswith('JPG') or f.endswith('jpg') or f.endswith('png')]
-    img_exps = np.zeros((images.shape[0], exp_bite))
+    img_exps = np.ones((images.shape[0], exp_bite))
     
     
     # for i, img_p in enumerate(img_lists):
