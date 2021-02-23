@@ -150,8 +150,8 @@ def render_path(render_poses, hwf, chunk, target_exp, render_kwargs, gt_imgs=Non
     # print(target_exp.shape,'7777777')
     while target_exp.shape[0] < render_poses.shape[0]:
         for i in range(int(render_poses.shape[0]/target_exp.shape[0]) +1 ):
-            print (target_exp.shape,'888888')
-            target_exp = np.concatenate(target_exp,target_exp)
+            # print (target_exp.shape,'888888')
+            target_exp = np.concatenate((target_exp,target_exp))
     target_exp = torch.tensor(target_exp).to(device).view(target_exp.shape[0], -1)
 
     if render_factor!=0:
