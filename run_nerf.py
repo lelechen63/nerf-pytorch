@@ -147,9 +147,10 @@ def render(H, W, focal, chunk=1024*32, rays=None, exp_code = None,  c2w=None, nd
 def render_path(render_poses, hwf, chunk, target_exp, render_kwargs, gt_imgs=None, savedir=None, render_factor=0):
 
     H, W, focal = hwf
-    print(target_exp.shape,'7777777')
+    # print(target_exp.shape,'7777777')
     while target_exp.shape[0] < render_poses.shape[0]:
-        target_exp = target_exp.extend(target_exp)
+        for i in range((render_poses.shape[0]/target_exp.shape[0]) +1 ):
+            target_exp = np.concatenate(target_exp,target_exp)
     target_exp = torch.tensor(target_exp).to(device).view(target_exp.shape[0], -1)
 
     if render_factor!=0:
@@ -557,9 +558,9 @@ def config_parser():
                         help='frequency of tensorboard image logging')
     parser.add_argument("--i_weights", type=int, default=10000, 
                         help='frequency of weight ckpt saving')
-    parser.add_argument("--i_testset", type=int, default=5000, 
+    parser.add_argument("--i_testset", type=int, default=5, 
                         help='frequency of testset saving')
-    parser.add_argument("--i_video",   type=int, default=5000, 
+    parser.add_argument("--i_video",   type=int, default=5, 
                         help='frequency of render_poses video saving')
 
     return parser
