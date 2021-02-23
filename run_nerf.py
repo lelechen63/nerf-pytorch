@@ -149,7 +149,7 @@ def render_path(render_poses, hwf, chunk, target_exp, render_kwargs, gt_imgs=Non
     H, W, focal = hwf
     # print(target_exp.shape,'7777777')
     while target_exp.shape[0] < render_poses.shape[0]:
-        for i in range((render_poses.shape[0]/target_exp.shape[0]) +1 ):
+        for i in range(int(render_poses.shape[0]/target_exp.shape[0]) +1 ):
             target_exp = np.concatenate(target_exp,target_exp)
     target_exp = torch.tensor(target_exp).to(device).view(target_exp.shape[0], -1)
 
