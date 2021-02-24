@@ -115,15 +115,15 @@ class NeRF(nn.Module):
             self.output_linear = DenseLayer(W, output_ch, activation="linear")
 
     def forward(self, x):
-        print (x.shape, self.input_ch_exp, self.input_ch, self.input_ch_views)
+        # print (x.shape, self.input_ch_exp, self.input_ch, self.input_ch_views)
         input_pts, input_views, input_ch_exp = torch.split(x, [self.input_ch, self.input_ch_views, self.input_ch_exp], dim=-1)
         # print (input_ch_exp[0])
         # print (gggg)
         # print (input_ch_exp.shape)
         exp = self.exp_linear(input_ch_exp)
         pose_encode = self.pose_linear(input_pts)
-        print(input_ch_exp[0],'========')
-        print(input_pts[0],'+++++')
+        # print(input_ch_exp[0],'========')
+        # print(input_pts[0],'+++++')
         h = torch.cat([pose_encode, exp], 1)
         for i, l in enumerate(self.pts_linears):
             h = self.pts_linears[i](h)
