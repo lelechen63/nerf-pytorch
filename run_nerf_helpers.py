@@ -117,6 +117,9 @@ class NeRF(nn.Module):
         # print (gggg)
         # print (input_ch_exp.shape)
         exp = self.exp_linear(input_ch_exp)
+        print(exp)
+        print('========')
+        print(input_pts)
         h = torch.cat([input_pts, exp], 1)
         for i, l in enumerate(self.pts_linears):
             h = self.pts_linears[i](h)
