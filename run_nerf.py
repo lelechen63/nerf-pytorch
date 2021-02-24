@@ -210,7 +210,7 @@ def create_nerf(args):
         embeddirs_fn, input_ch_views = get_embedder(args.multires_views, args.i_embed)
 
     
-    embedexp_fn, input_ch_exp = get_embedder(args.multires_exp, args.i_embed)
+    embedexp_fn, input_ch_exp = get_embedder(args.multires_exp, args.i_embed, args.exp_bite)
     print (input_ch_exp,'!!!!!!!')
     #input_ch_views 27
     output_ch = 5 if args.N_importance > 0 else 4
@@ -581,7 +581,7 @@ def train():
 
     parser = config_parser()
     args = parser.parse_args()
-    exp_bite = 62
+    exp_bite = 63
     args.pretrain = False
     args.exp_bite = exp_bite
     # Multi-GPU
