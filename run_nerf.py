@@ -34,7 +34,7 @@ def batchify(fn, chunk):
     return ret
 
 
-def run_network(inputs, exp_inputs, viewdirs, fn, embed_fn, embeddirs_fn, netchunk=1024*64):
+def run_network(inputs, exp_inputs, viewdirs, fn, embed_fn, embeddirs_fn,embedexp_fn, netchunk=1024*64):
     """Prepares inputs and applies network 'fn'.
     """
     # print(inputs.shape)
@@ -46,7 +46,8 @@ def run_network(inputs, exp_inputs, viewdirs, fn, embed_fn, embeddirs_fn, netchu
         input_dirs = viewdirs[:,None].expand(inputs.shape)
         input_dirs_flat = torch.reshape(input_dirs, [-1, input_dirs.shape[-1]])
         embedded_dirs = embeddirs_fn(input_dirs_flat)
-        embedded = torch.cat([embedded, embedded_dirs, exp_inputs], -1)
+        embedded_exp = embedexp_fn(exp_inputs)
+        embedded = torch.cat([embedded, embedded_dirs, embedded_exp], -1)
 
         # print(gggg)
     outputs_flat = batchify(fn, netchunk)(embedded)
@@ -206,12 +207,16 @@ def create_nerf(args):
 
     if args.use_viewdirs:
         embeddirs_fn, input_ch_views = get_embedder(args.multires_views, args.i_embed)
+
+    
+    embedexp_fn, input_ch_exp = get_embedder(args.multires_exp, args.i_embed)
+    print (input_ch_exp,'!!!!!!!')
     #input_ch_views 27
     output_ch = 5 if args.N_importance > 0 else 4
     skips = [4]
     model = NeRF(D=args.netdepth, W=args.netwidth,
                  input_ch=input_ch, output_ch=output_ch, skips=skips,
-                 input_ch_views=input_ch_views, use_viewdirs=args.use_viewdirs, input_ch_exp = args.exp_bite)
+                 input_ch_views=input_ch_views, use_viewdirs=args.use_viewdirs, input_ch_exp = input_ch_exp)
     
     print (model)
     # print(gg)
@@ -229,6 +234,7 @@ def create_nerf(args):
     network_query_fn = lambda inputs, exp_inputs, viewdirs, network_fn : run_network(inputs, exp_inputs, viewdirs, network_fn,
                                                                 embed_fn=embed_fn,
                                                                 embeddirs_fn=embeddirs_fn,
+                                                                embedexp_fn=embedexp_fn,
                                                                 netchunk=args.netchunk_per_gpu*args.n_gpus)
 
     # print (inputs.shape)
@@ -509,6 +515,8 @@ def config_parser():
                         help='log2 of max freq for positional encoding (3D location)')
     parser.add_argument("--multires_views", type=int, default=4, 
                         help='log2 of max freq for positional encoding (2D direction)')
+    parser.add_argument("--multires_exp", type=int, default=2, 
+                        help='log2 of max freq for positional encoding (62 direction)')
     parser.add_argument("--raw_noise_std", type=float, default=0., 
                         help='std dev of noise added to regularize sigma_a output, 1e0 recommended')
 
