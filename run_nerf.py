@@ -478,7 +478,7 @@ def config_parser():
                         help='channels per layer in fine network')
     parser.add_argument("--N_rand", type=int, default=32*32*4, 
                         help='batch size (number of random rays per gradient step)')
-    parser.add_argument("--lrate", type=float, default=5e-4, 
+    parser.add_argument("--lrate", type=float, default=5e-2, 
                         help='learning rate')
     parser.add_argument("--lrate_decay", type=int, default=250, 
                         help='exponential learning rate decay (in 1000 steps)')
@@ -636,14 +636,13 @@ def train():
     # fake the facial expression
     img_lists = [os.path.join(args.datadir, 'images', f) for f in sorted(os.listdir(os.path.join(args.datadir, 'images'))) \
     if f.endswith('JPG') or f.endswith('jpg') or f.endswith('png')]
-    img_exps = np.zeros((images.shape[0], exp_bite)) - 0.00001
-    
+    img_exps = np.zeros((images.shape[0], exp_bite))
     # print (img_exps.shape,'*********************')
-    # for i, img_p in enumerate(img_lists):
-    #     print (i,'++++')
-    #     # exp_p = img_p.replace('images', 'expression_code')[:-3] +'npy'
-    #     exp_p ='/home/cxu-serve/u1/lchen63/github/nerf-pytorch/data/lele_data/expression_code/IMG_0267_00000.npy'
-    #     img_exps[i] = np.load(exp_p) 
+    for i, img_p in enumerate(img_lists):
+        # print (i,'++++')
+        # exp_p = img_p.replace('images', 'expression_code')[:-3] +'npy'
+        exp_p ='/home/cxu-serve/u1/lchen63/github/nerf-pytorch/data/lele_data/expression_code/IMG_0267_00000.npy'
+        img_exps[i] = np.load(exp_p) 
 
 
     # Create nerf model
