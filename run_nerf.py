@@ -46,9 +46,9 @@ def run_network(inputs, exp_inputs, viewdirs, fn, embed_fn, embeddirs_fn,embedex
         input_dirs = viewdirs[:,None].expand(inputs.shape)
         input_dirs_flat = torch.reshape(input_dirs, [-1, input_dirs.shape[-1]])
         embedded_dirs = embeddirs_fn(input_dirs_flat)
-        # embedded_exp = embedexp_fn(exp_inputs)
+        embedded_exp = embedexp_fn(exp_inputs)
         # print (embedded_dirs.shape, embedded.shape, embedded_exp.shape, '!!!!!!!!')
-        embedded = torch.cat([embedded, embedded_dirs, exp_inputs], -1)
+        embedded = torch.cat([embedded, embedded_dirs, embedded_exp], -1)
 
         # print(gggg)
     outputs_flat = batchify(fn, netchunk)(embedded)
@@ -217,7 +217,7 @@ def create_nerf(args):
     skips = [4]
     model = NeRF(D=args.netdepth, W=args.netwidth,
                  input_ch=input_ch, output_ch=output_ch, skips=skips,
-                 input_ch_views=input_ch_views, use_viewdirs=args.use_viewdirs, input_ch_exp = args.exp_bite)
+                 input_ch_views=input_ch_views, use_viewdirs=args.use_viewdirs, input_ch_exp = input_ch_exp)
     
     print (model)
     # print(gg)
@@ -228,7 +228,7 @@ def create_nerf(args):
     if args.N_importance > 0:
         model_fine = NeRF(D=args.netdepth_fine, W=args.netwidth_fine,
                           input_ch=input_ch, output_ch=output_ch, skips=skips,
-                          input_ch_views=input_ch_views, use_viewdirs=args.use_viewdirs, input_ch_exp = args.exp_bite)
+                          input_ch_views=input_ch_views, use_viewdirs=args.use_viewdirs, input_ch_exp = input_ch_exp)
         model_fine = nn.DataParallel(model_fine).to(device)
         grad_vars += list(model_fine.parameters())
 
@@ -652,7 +652,8 @@ def train():
         # print (i,'++++')
         # exp_p = img_p.replace('images', 'expression_code')[:-3] +'npy'
         exp_p ='/home/cxu-serve/u1/lchen63/github/nerf-pytorch/data/lele_data/expression_code/IMG_0267_00000.npy'
-        img_exps[i] = np.linspace(-1., 1, args.exp_bite) #np.load(exp_p) 
+        # img_exps[i] = np.linspace(-1., 1, args.exp_bite) #
+        img_exps[i] =np.load(exp_p) 
 
 
     # Create nerf model
