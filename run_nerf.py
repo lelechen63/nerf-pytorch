@@ -581,7 +581,7 @@ def train():
 
     parser = config_parser()
     args = parser.parse_args()
-    exp_bite = 63
+    exp_bite = 62
     args.pretrain = False
     args.exp_bite = exp_bite
     # Multi-GPU
