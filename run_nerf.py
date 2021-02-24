@@ -47,6 +47,7 @@ def run_network(inputs, exp_inputs, viewdirs, fn, embed_fn, embeddirs_fn,embedex
         input_dirs_flat = torch.reshape(input_dirs, [-1, input_dirs.shape[-1]])
         embedded_dirs = embeddirs_fn(input_dirs_flat)
         embedded_exp = embedexp_fn(exp_inputs)
+        print (embedded_dirs.shape, self.embeded.shape, self.embedded_exp.shape, '!!!!!!!!')
         embedded = torch.cat([embedded, embedded_dirs, embedded_exp], -1)
 
         # print(gggg)
