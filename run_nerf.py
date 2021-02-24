@@ -515,7 +515,7 @@ def config_parser():
                         help='log2 of max freq for positional encoding (3D location)')
     parser.add_argument("--multires_views", type=int, default=4, 
                         help='log2 of max freq for positional encoding (2D direction)')
-    parser.add_argument("--multires_exp", type=int, default=2, 
+    parser.add_argument("--multires_exp", type=int, default=10, 
                         help='log2 of max freq for positional encoding (62 direction)')
     parser.add_argument("--raw_noise_std", type=float, default=0., 
                         help='std dev of noise added to regularize sigma_a output, 1e0 recommended')
