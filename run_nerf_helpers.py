@@ -61,7 +61,7 @@ def get_embedder(multires, i=0, input_dim =3):
         return nn.Identity(), 3
     
     embed_kwargs = {
-                'include_input' : True,
+                'include_input' : False,
                 'input_dims' : input_dim,
                 'max_freq_log2' : multires-1,
                 'num_freqs' : multires,
