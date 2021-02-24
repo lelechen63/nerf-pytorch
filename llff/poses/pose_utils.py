@@ -103,7 +103,7 @@ def save_poses(basedir, poses, pts3d, perm):
     
     save_arr = []
     for i in perm:
-        # print (i)
+        print (i)
         vis = vis_arr[:, i]
         # print (set(vis))
         # print ('1')
