@@ -569,9 +569,9 @@ def config_parser():
                         help='frequency of tensorboard image logging')
     parser.add_argument("--i_weights", type=int, default=10000, 
                         help='frequency of weight ckpt saving')
-    parser.add_argument("--i_testset", type=int, default=5000, 
+    parser.add_argument("--i_testset", type=int, default=5, 
                         help='frequency of testset saving')
-    parser.add_argument("--i_video",   type=int, default=5000, 
+    parser.add_argument("--i_video",   type=int, default=5, 
                         help='frequency of render_poses video saving')
 
     return parser
@@ -650,8 +650,8 @@ def train():
     # print (img_exps.shape,'*********************')
     for i, img_p in enumerate(img_lists):
         # print (i,'++++')
-        # exp_p = img_p.replace('images', 'expression_code')[:-3] +'npy'
-        exp_p ='/home/cxu-serve/u1/lchen63/github/nerf-pytorch/data/lele_data/expression_code/IMG_0267_00000.npy'
+        exp_p = img_p.replace('images', 'expression_code')[:-3] +'npy'
+        # exp_p ='/home/cxu-serve/u1/lchen63/github/nerf-pytorch/data/lele_data/expression_code/IMG_0267_00000.npy'
         # img_exps[i] = np.linspace(-1., 1, args.exp_bite) #
         img_exps[i] =np.load(exp_p) 
 
