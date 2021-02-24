@@ -126,7 +126,7 @@ class NeRF(nn.Module):
         pose_encode = self.pose_linear(input_pts)
         # print(input_ch_exp[0],'========')
         # print(input_pts[0],'+++++')
-        h = torch.cat([pose_encode, exp], 1)WW
+        h = torch.cat([pose_encode, exp], 1)
         for i, l in enumerate(self.pts_linears):
             h = self.pts_linears[i](h)
             h = F.relu(h)
