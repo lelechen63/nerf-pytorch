@@ -59,7 +59,7 @@ def run_network(inputs, exp_inputs, viewdirs, fn, embed_fn, embeddirs_fn,embedex
 def batchify_rays(rays_flat, exp_code,  chunk=1024*16, **kwargs):
     """Render rays in smaller minibatches to avoid OOM.
     """
-    print(exp_code.shape, chunk, '!!!!!!!!')
+    # print(exp_code.shape, chunk, '!!!!!!!!')
     all_ret = {}
     for i in range(0, rays_flat.shape[0], chunk):
         # print (rays_flat[i:i+chunk].shape, exp_code[i:i+chunk].shape,'=======================')
