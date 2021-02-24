@@ -96,7 +96,7 @@ class NeRF(nn.Module):
         self.pose_linear = nn.Sequential(
                         DenseLayer(input_ch, W, activation="relu"),
                         DenseLayer(W, W, activation="relu"))
-                        
+
         self.pts_linears = nn.ModuleList(
             [DenseLayer(W + W, W, activation="relu")] + [DenseLayer(W, W, activation="relu") if i not in self.skips else DenseLayer(W + W , W, activation="relu") for i in range(D-1)])
         
@@ -115,7 +115,7 @@ class NeRF(nn.Module):
             self.output_linear = DenseLayer(W, output_ch, activation="linear")
 
     def forward(self, x):
-        
+        print (x.shape, self.input_ch_exp, self.input_ch, self.input_ch_views)
         input_pts, input_views, input_ch_exp = torch.split(x, [self.input_ch, self.input_ch_views, self.input_ch_exp], dim=-1)
         # print (input_ch_exp[0])
         # print (gggg)
