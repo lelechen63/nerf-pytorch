@@ -652,7 +652,7 @@ def train():
         # print (i,'++++')
         # exp_p = img_p.replace('images', 'expression_code')[:-3] +'npy'
         exp_p ='/home/cxu-serve/u1/lchen63/github/nerf-pytorch/data/lele_data/expression_code/IMG_0267_00000.npy'
-        img_exps[i] = np.linspace(0., max_freq, steps=args.exp_bite) #np.load(exp_p) 
+        img_exps[i] = np.linspace(-1., 1, steps=args.exp_bite) #np.load(exp_p) 
 
 
     # Create nerf model
