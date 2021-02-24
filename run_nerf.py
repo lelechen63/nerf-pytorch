@@ -198,7 +198,7 @@ def render_path(render_poses, hwf, chunk, target_exp, render_kwargs, gt_imgs=Non
 def create_nerf(args):
     """Instantiate NeRF's MLP model.
     """
-    print(args.multires, args.i_embed,'!!!!!!!!!')
+    # print(args.multires, args.i_embed,'!!!!!!!!!')
     embed_fn, input_ch = get_embedder(args.multires, args.i_embed)
     #input_ch 63
     print (args.use_viewdirs)
@@ -211,7 +211,7 @@ def create_nerf(args):
 
     
     embedexp_fn, input_ch_exp = get_embedder(args.multires_exp, args.i_embed, args.exp_bite)
-    print (input_ch_exp,'!!!!!!!')
+    # print (input_ch_exp,'!!!!!!!')
     #input_ch_views 27
     output_ch = 5 if args.N_importance > 0 else 4
     skips = [4]

@@ -122,8 +122,8 @@ class NeRF(nn.Module):
         # print (input_ch_exp.shape)
         exp = self.exp_linear(input_ch_exp)
         pose_encode = self.pose_linear(input_pts)
-        # print(input_ch_exp[0],'========')
-        # print(input_pts[0],'+++++')
+        print(input_ch_exp[0],'========')
+        print(input_pts[0],'+++++')
         h = torch.cat([pose_encode, exp], 1)
         for i, l in enumerate(self.pts_linears):
             h = self.pts_linears[i](h)
