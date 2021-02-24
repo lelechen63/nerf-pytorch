@@ -56,7 +56,7 @@ def run_network(inputs, exp_inputs, viewdirs, fn, embed_fn, embeddirs_fn,embedex
     return outputs
 
 
-def batchify_rays(rays_flat, exp_code,  chunk=1024*32, **kwargs):
+def batchify_rays(rays_flat, exp_code,  chunk=1024*16, **kwargs):
     """Render rays in smaller minibatches to avoid OOM.
     """
     all_ret = {}
