@@ -46,9 +46,9 @@ def run_network(inputs, exp_inputs, viewdirs, fn, embed_fn, embeddirs_fn,embedex
         input_dirs = viewdirs[:,None].expand(inputs.shape)
         input_dirs_flat = torch.reshape(input_dirs, [-1, input_dirs.shape[-1]])
         embedded_dirs = embeddirs_fn(input_dirs_flat)
-        embedded_exp = embedexp_fn(exp_inputs)
-        print (embedded_dirs.shape, embedded.shape, embedded_exp.shape, '!!!!!!!!')
-        embedded = torch.cat([embedded, embedded_dirs, embedded_exp], -1)
+        # embedded_exp = embedexp_fn(exp_inputs)
+        # print (embedded_dirs.shape, embedded.shape, embedded_exp.shape, '!!!!!!!!')
+        embedded = torch.cat([embedded, embedded_dirs, exp_inputs], -1)
 
         # print(gggg)
     outputs_flat = batchify(fn, netchunk)(embedded)
@@ -217,7 +217,7 @@ def create_nerf(args):
     skips = [4]
     model = NeRF(D=args.netdepth, W=args.netwidth,
                  input_ch=input_ch, output_ch=output_ch, skips=skips,
-                 input_ch_views=input_ch_views, use_viewdirs=args.use_viewdirs, input_ch_exp = input_ch_exp)
+                 input_ch_views=input_ch_views, use_viewdirs=args.use_viewdirs, input_ch_exp = args.exp_bite)
     
     print (model)
     # print(gg)
@@ -228,7 +228,7 @@ def create_nerf(args):
     if args.N_importance > 0:
         model_fine = NeRF(D=args.netdepth_fine, W=args.netwidth_fine,
                           input_ch=input_ch, output_ch=output_ch, skips=skips,
-                          input_ch_views=input_ch_views, use_viewdirs=args.use_viewdirs, input_ch_exp = input_ch_exp)
+                          input_ch_views=input_ch_views, use_viewdirs=args.use_viewdirs, input_ch_exp = args.exp_bite)
         model_fine = nn.DataParallel(model_fine).to(device)
         grad_vars += list(model_fine.parameters())
 
