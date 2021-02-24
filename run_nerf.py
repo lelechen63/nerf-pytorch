@@ -638,8 +638,9 @@ def train():
     if f.endswith('JPG') or f.endswith('jpg') or f.endswith('png')]
     img_exps = np.zeros((images.shape[0], exp_bite))
     
-    
+    print (img_exps.shape,'*********************')
     for i, img_p in enumerate(img_lists):
+        print (i,'++++')
         # exp_p = img_p.replace('images', 'expression_code')[:-3] +'npy'
         exp_p ='/home/cxu-serve/u1/lchen63/github/nerf-pytorch/data/lele_data/expression_code/IMG_0267_00000.npy'
         img_exps[i] = np.load(exp_p) 
