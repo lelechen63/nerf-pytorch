@@ -4,9 +4,9 @@ import sys
 import os
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument('--v_path', type=str, default='/home/cxu-serve/u1/lchen63/github/nerf-pytorch/data/lele_data3/video/IMG_0298.MOV',
+parser.add_argument('--v_path', type=str, default='/home/cxu-serve/u1/lchen63/github/nerf-pytorch/data/lele_data3/video/IMG_0299.MOV',
                     help='input video path')
-parser.add_argument('--v_id', type=str, default='IMG_0298',
+parser.add_argument('--v_id', type=str, default='IMG_0299',
                     help='input video path')
 parser.add_argument('--img_path', type=str, default='/home/cxu-serve/u1/lchen63/github/nerf-pytorch/data/lele_data3/images',
                     help='input video path')
