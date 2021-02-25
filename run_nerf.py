@@ -583,7 +583,7 @@ def train():
     parser = config_parser()
     args = parser.parse_args()
     exp_bite = 63
-    args.pretrain = False
+    args.pretrain = True
     args.exp_bite = exp_bite
     # Multi-GPU
     args.n_gpus = torch.cuda.device_count()
