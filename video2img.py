@@ -4,11 +4,11 @@ import sys
 import os
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument('--v_path', type=str, default='/home/cxu-serve/u1/lchen63/github/nerf-pytorch/data/lele_data2/video/IMG_0283.MOV',
+parser.add_argument('--v_path', type=str, default='/home/cxu-serve/u1/lchen63/github/nerf-pytorch/data/lele_data3/video/IMG_0297.MOV',
                     help='input video path')
-parser.add_argument('--v_id', type=str, default='IMG_0283',
+parser.add_argument('--v_id', type=str, default='IMG_0297',
                     help='input video path')
-parser.add_argument('--img_path', type=str, default='/home/cxu-serve/u1/lchen63/github/nerf-pytorch/data/lele_data2/images',
+parser.add_argument('--img_path', type=str, default='/home/cxu-serve/u1/lchen63/github/nerf-pytorch/data/lele_data3/images',
                     help='input video path')
 
 args = parser.parse_args()
